@@ -38,6 +38,11 @@ public static class MauiProgram
 		builder.Services.AddScoped<ListViewModel>();
 		builder.Services.AddScoped<ListPage>();
 
+		builder.Services.AddTransient<BarcodePage>();
+
+		builder.Services.AddSingleton<DetailPage>();
+		builder.Services.AddSingleton<DetailViewModel>();
+
 		builder.Services.AddSingleton<AuthorizedAPIService>();
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<PicklistService>();

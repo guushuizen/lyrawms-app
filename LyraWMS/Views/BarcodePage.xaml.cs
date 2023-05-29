@@ -25,12 +25,6 @@ public partial class BarcodePage : ContentPage
             return;
         }
 
-        Application.Current.MainPage.DisplayAlert(
-            "Barcode gevonden",
-            barcode[0].DisplayValue,
-            "Sluiten"
-        );
-
         _onBarcodeScannedCommand.Execute(barcode[0].DisplayValue);
     }
 }

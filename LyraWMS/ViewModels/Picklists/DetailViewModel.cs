@@ -1,25 +1,32 @@
+using System.Windows.Input;
 using LyraWMS.Models;
 using LyraWMS.Services;
 
 namespace LyraWMS.ViewModels.Picklists;
 
+[QueryProperty(nameof(Picklist), "Picklist")]
 public class DetailViewModel : BaseViewModel
 {
+    private Picklist _picklist;
+    public Picklist Picklist
+    {
+        get => _picklist;
+        set => SetProperty(ref _picklist, value);
+    }
 
     private readonly PicklistService _picklistService;
 
-    private List<Picklist> _picklists;
-    public List<Picklist> Picklists
-    {
-        get => _picklists;
-        set => SetProperty(ref _picklists, value);
-    }
-
+    public ICommand GoBackCommand { get; set; }
+    
     public DetailViewModel(PicklistService picklistService)
     {
         _picklistService = picklistService;
 
-        Task.Run(async () => await _picklistService.GetPicklists())
-            .ContinueWith(task => Picklists = task.Result);
+        GoBackCommand = new Command(async () => await GoBack());
+    }
+
+    private async Task GoBack()
+    {
+        await Shell.Current.Navigation.PopAsync();
     }
 }

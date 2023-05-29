@@ -6,7 +6,8 @@
              xmlns:picklistsVm="clr-namespace:LyraWMS.ViewModels.Picklists"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="LyraWMS.Views.Picklists.ListPage"
-             x:DataType="picklistsVm:ListViewModel">
+             x:DataType="picklistsVm:ListViewModel"
+             Title="Picklists">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding OpenBarcodePopupCommand}">
@@ -25,9 +26,14 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout>
-        <ScrollView Padding="0,10,0,0" IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}">
-            <StackLayout BindableLayout.ItemsSource="{Binding Picklists}">
-                <BindableLayout.ItemTemplate>
+        <CollectionView
+            ItemsSource="{Binding Picklists}"
+            Margin="0,10,0,0"
+            IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
+            SelectionMode="Single"
+            SelectionChangedCommand="{Binding GoToPicklistCommand}"
+            SelectionChangedCommandParameter="{Binding Path=SelectedItem.Reference, Source={RelativeSource Self}}">
+            <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Picklist">
                         <VerticalStackLayout VerticalOptions="Fill" Padding="10,0">
                             <Grid>
@@ -86,12 +92,11 @@
                                 Color="{StaticResource Gray100}" />
                         </VerticalStackLayout>
                     </DataTemplate>
-                </BindableLayout.ItemTemplate>
-
-                <BindableLayout.EmptyView>
-                </BindableLayout.EmptyView>
-            </StackLayout>
-        </ScrollView>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.EmptyView>
+            </CollectionView.EmptyView>
+        </CollectionView>
 
         <ActivityIndicator
             IsRunning="True"

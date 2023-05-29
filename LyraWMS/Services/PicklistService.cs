@@ -37,4 +37,25 @@ public class PicklistService
 
         return picklists;
     }
+
+    public async Task<Picklist?> GetPicklist(string picklistId)
+    {
+        Picklist? picklist = _picklists.FirstOrDefault(p => p.Reference == picklistId);
+
+        if (picklist != null)
+            return picklist;
+        
+        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}");
+
+        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
+
+        if (body["rows"].AsArray().Count == 0)
+            return null;
+
+        picklist = _apiService.DeserializeJson<Picklist>(body["rows"][0]);
+        
+        _picklists.Add(picklist);
+
+        return picklist;
+    }
 }

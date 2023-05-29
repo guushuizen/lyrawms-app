@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Views;
 using LyraWMS.Models;
 using LyraWMS.Services;
 using LyraWMS.Views;
+using LyraWMS.Views.Picklists;
 
 namespace LyraWMS.ViewModels.Picklists;
 
@@ -20,6 +21,8 @@ public class ListViewModel : BaseViewModel
 
     public ICommand OpenBarcodePopupCommand { get; set; }
     
+    public ICommand GoToPicklistCommand { get; set; }
+    
     public ListViewModel(PicklistService picklistService)
     {
         _picklistService = picklistService;
@@ -29,6 +32,7 @@ public class ListViewModel : BaseViewModel
         Task.Run(Initialize);
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
+        GoToPicklistCommand = new Command(async (picklistId) => await GoToPicklist((string) picklistId));
     }
 
     private async Task Initialize()
@@ -43,10 +47,30 @@ public class ListViewModel : BaseViewModel
         await BarcodeScanner.Mobile.Methods.AskForRequiredPermission();
 
         await Shell.Current.Navigation.PushModalAsync(new BarcodePage(
-            new Command(async (barcode) => {
-                await Shell.Current.GoToAsync((string)barcode);
-            })
+            new Command(barcode => GoToPicklistCommand.Execute((string)barcode))
         ));
     }
 
+    private async Task GoToPicklist(string picklistId)
+    {
+        Picklist? picklist = await _picklistService.GetPicklist(picklistId);
+
+        await Shell.Current.Navigation.PopModalAsync();
+        
+        if (picklist == null)
+        {
+            await Shell.Current.DisplayAlert(
+                "Niet gevonden",
+                "Een picklist met deze ID kon niet gevonden worden!",
+                "OK"
+            );
+
+            return;
+        }
+
+        await Shell.Current.GoToAsync(nameof(DetailPage), new Dictionary<string, object>
+        {
+            { nameof(Picklist), picklist }
+        });
+    }
 }

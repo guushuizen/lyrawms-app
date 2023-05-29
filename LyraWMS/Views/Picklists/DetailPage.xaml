@@ -2,8 +2,14 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LyraWMS.Views.Picklists.DetailPage">
+             xmlns:vm="clr-namespace:LyraWMS.ViewModels.Picklists"
+             x:Class="LyraWMS.Views.Picklists.DetailPage"
+             x:DataType="vm:DetailViewModel"
+             Title="{Binding Picklist.Reference, StringFormat='Picklist {0}'}">
     <ContentPage.Content>
-        
+        <Label 
+            Text="{Binding Picklist.Reference}"
+            FontSize="18"
+            HorizontalOptions="Center" />
     </ContentPage.Content>
 </ContentPage>
