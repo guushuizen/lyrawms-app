@@ -33,6 +33,8 @@ public class DetailViewModel : BaseViewModel
     public ObservableCollection<KeyValuePair<string, int>> PickedQuantites { get; set; } = new();
     
     public ICommand OpenBarcodePopupCommand { get; set; }
+    
+    public ICommand DecreasePickedProductQuantityCommand { get; set; }
 
     public DetailViewModel(PicklistService picklistService)
     {
@@ -41,6 +43,8 @@ public class DetailViewModel : BaseViewModel
         _picklistService = picklistService;
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
+
+        DecreasePickedProductQuantityCommand = new Command((product) => DecreasePickedProductQuantity((Product) product));
     }
 
     private async Task Initialize()
@@ -62,6 +66,11 @@ public class DetailViewModel : BaseViewModel
         ));
     }
 
+    private void DecreasePickedProductQuantity(Product product)
+    {
+        WeakReferenceMessenger.Default.Send(new ProductUnpickedMessage(product));
+    }
+    
     private async Task OnBarcodeScanned(string sku)
     {
         Product? product = FullPicklist.Products.Find(p => p.Sku == sku);

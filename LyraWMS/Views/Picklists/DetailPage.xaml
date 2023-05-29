@@ -129,9 +129,18 @@
                                             Text="{Binding Sku, StringFormat='SKU: {0}'}"/>
                                     </VerticalStackLayout>
                                     
-                                    <controls:PickableProduct
-                                        ProductUuid="{Binding Uuid}"
-                                        ProductQuantity="{Binding Pivot.Amount}" />
+                                    <VerticalStackLayout>
+                                        <controls:PickableProduct
+                                            ProductUuid="{Binding Uuid}"
+                                            ProductQuantity="{Binding Pivot.Amount}" />
+                                    
+                                        <Button
+                                            HorizontalOptions="Center"
+                                            Command="{Binding Path=DecreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            CommandParameter="{Binding}" 
+                                            Text="-"
+                                            TextColor="{StaticResource White}" />
+                                    </VerticalStackLayout>
                                 </FlexLayout>
                                                               
                             </DataTemplate>
