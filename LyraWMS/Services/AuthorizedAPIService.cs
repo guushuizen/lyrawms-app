@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using LyraWMS.Models;
 
 namespace LyraWMS.Services;
@@ -55,9 +56,9 @@ public class AuthorizedAPIService
         return response;
     }
     
-    public TValue DeserializeJson<TValue>(JsonNode jsonObject)
+    public TValue DeserializeJson<TValue>(string jsonObject)
     {
-        return jsonObject.Deserialize<TValue>(new JsonSerializerOptions
+        return JsonSerializer.Deserialize<TValue>(jsonObject, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         });

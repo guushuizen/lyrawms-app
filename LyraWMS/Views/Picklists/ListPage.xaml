@@ -95,6 +95,11 @@
             </CollectionView.ItemTemplate>
             
             <CollectionView.EmptyView>
+                <Label 
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Text="Je hebt nog geen picklists!"
+                    />
             </CollectionView.EmptyView>
         </CollectionView>
 

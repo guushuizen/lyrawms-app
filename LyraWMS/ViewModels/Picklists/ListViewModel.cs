@@ -53,7 +53,7 @@ public class ListViewModel : BaseViewModel
 
     private async Task GoToPicklist(string picklistId)
     {
-        Picklist? picklist = await _picklistService.GetPicklist(picklistId);
+        Picklist? picklist = await _picklistService.FindPicklist(picklistId);
 
         await Shell.Current.Navigation.PopModalAsync();
         

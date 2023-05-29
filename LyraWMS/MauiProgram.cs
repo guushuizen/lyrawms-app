@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using BarcodeScanner.Mobile;
 using CommunityToolkit.Maui.Markup;
+using LyraWMS.Controls;
+using LyraWMS.Controls.ViewModels;
 using LyraWMS.Services;
 using LyraWMS.ViewModels;
 using LyraWMS.ViewModels.Picklists;
@@ -25,6 +27,7 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+				fonts.AddFont("OpenSans-Bold.ttf", "OpenSansBold");
 			})
 			.UseMauiCommunityToolkit()
 			.UseMauiCommunityToolkitMarkup();
@@ -40,8 +43,11 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<BarcodePage>();
 
-		builder.Services.AddSingleton<DetailPage>();
-		builder.Services.AddSingleton<DetailViewModel>();
+		builder.Services.AddTransient<DetailPage>();
+		builder.Services.AddTransient<DetailViewModel>();
+
+		builder.Services.AddTransient<PickableProduct>();
+		builder.Services.AddTransient<PickableProductViewModel>();
 
 		builder.Services.AddSingleton<AuthorizedAPIService>();
 		builder.Services.AddSingleton<AuthenticationService>();

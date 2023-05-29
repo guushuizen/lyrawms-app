@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json.Nodes;
 using LyraWMS.Models;
 
@@ -31,14 +32,14 @@ public class PicklistService
 
         var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-        List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(body["rows"]);
+        List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(body["rows"].ToJsonString());
             
         _picklists.AddRange(picklists);
 
         return picklists;
     }
 
-    public async Task<Picklist?> GetPicklist(string picklistId)
+    public async Task<Picklist?> FindPicklist(string picklistId)
     {
         Picklist? picklist = _picklists.FirstOrDefault(p => p.Reference == picklistId);
 
@@ -52,10 +53,26 @@ public class PicklistService
         if (body["rows"].AsArray().Count == 0)
             return null;
 
-        picklist = _apiService.DeserializeJson<Picklist>(body["rows"][0]);
+        picklist = _apiService.DeserializeJson<Picklist>(body["rows"][0].ToJsonString());
         
         _picklists.Add(picklist);
 
+        return picklist;
+    }
+
+    public async Task<FullPicklist?> GetFullPicklist(string picklistUuid)
+    {
+        HttpResponseMessage response = await _apiService.GetAsync($"/picklist/{picklistUuid}");
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return null;
+        }
+        
+        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
+
+        FullPicklist picklist = _apiService.DeserializeJson<FullPicklist>(body["picklist"].ToJsonString());
+        
         return picklist;
     }
 }
