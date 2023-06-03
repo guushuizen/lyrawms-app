@@ -1,4 +1,6 @@
-using System; 
+using System;
+using System.Text.Json.Serialization;
+
 namespace LyraWMS.Models{ 
 
     public class ProductLocation
@@ -8,11 +10,10 @@ namespace LyraWMS.Models{
         public int ProductId { get; set; }
         public int LocationId { get; set; }
         public int Stock { get; set; }
-        public string ReservedStock { get; set; }
+        
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public int ReservedStock { get; set; }
         public int StockThreshold { get; set; }
-        public object DeletedAt { get; set; }
-        public object CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public bool Migrated { get; set; }
         public Location Location { get; set; }
     }

@@ -1,14 +1,17 @@
-﻿using CommunityToolkit.Maui;
+﻿using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
 using BarcodeScanner.Mobile;
 using CommunityToolkit.Maui.Markup;
 using LyraWMS.Controls;
 using LyraWMS.Controls.ViewModels;
 using LyraWMS.Services;
 using LyraWMS.ViewModels;
-using LyraWMS.ViewModels.Picklists;
+
+using PicklistViewModels = LyraWMS.ViewModels.Picklists;
+using PicklistViews = LyraWMS.Views.Picklists;
+using ProductViews = LyraWMS.Views.Products;
+using ProductViewModels = LyraWMS.ViewModels.Products;
 using LyraWMS.Views;
-using LyraWMS.Views.Picklists;
-using Microsoft.Extensions.Logging;
 
 namespace LyraWMS;
 
@@ -38,13 +41,17 @@ public static class MauiProgram
 		builder.Services.AddTransient<DashboardViewModel>();
 		builder.Services.AddTransient<Dashboard>();
 
-		builder.Services.AddScoped<ListViewModel>();
-		builder.Services.AddScoped<ListPage>();
-
+		builder.Services.AddScoped<ProductViewModels.ListViewModel>();
+		builder.Services.AddScoped<ProductViews.ListPage>();
+		builder.Services.AddTransient<ProductViewModels.DetailViewModel>();
+		builder.Services.AddTransient<ProductViews.DetailPage>();
+	
 		builder.Services.AddTransient<BarcodePage>();
 
-		builder.Services.AddTransient<DetailPage>();
-		builder.Services.AddTransient<DetailViewModel>();
+		builder.Services.AddScoped<PicklistViews.ListPage>();
+		builder.Services.AddScoped<PicklistViewModels.ListViewModel>();
+		builder.Services.AddTransient<PicklistViews.DetailPage>();
+		builder.Services.AddTransient<PicklistViewModels.DetailViewModel>();
 
 		builder.Services.AddTransient<PickableProduct>();
 		builder.Services.AddTransient<PickableProductViewModel>();
@@ -52,6 +59,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<AuthorizedAPIService>();
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<PicklistService>();
+		builder.Services.AddSingleton<ProductService>();
 
 		
 #if DEBUG

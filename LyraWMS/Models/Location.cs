@@ -10,9 +10,9 @@ namespace LyraWMS.Models{
         public string Name { get; set; }
         public string Separator { get; set; }
         public object PointId { get; set; }
-        public int ParentLocationId { get; set; }
+        public int? ParentLocationId { get; set; }
         public object StaticLocationTypeId { get; set; }
-        public int DynamicLocationTypeId { get; set; }
+        public int? DynamicLocationTypeId { get; set; }
         public int Volume { get; set; }
         public int UnlinkIfEmpty { get; set; }
         public int UsedVolume { get; set; }

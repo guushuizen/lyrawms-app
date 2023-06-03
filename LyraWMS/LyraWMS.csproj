@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<!--For deploying to devices:-->
 		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
-		<!--For testing:-->
+<!--		For testing:-->
 		<!--<TargetFrameworks>net7.0;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>-->
 		<OutputType Condition="'$(TargetFramework)' != 'net7.0'">Exe</OutputType>
 		<RootNamespace>LyraWMS</RootNamespace>
@@ -99,6 +99,12 @@
 		<MauiXaml Update="Views\LoadingPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Products\ListPage.xaml">
+		  <SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Products\DetailPage.xaml">
+		  <SubType>Designer</SubType>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -110,5 +116,26 @@
 			<DependentUpon>LoadingPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
+		<Compile Update="Views\Products\ListPage.xaml.cs">
+		  <DependentUpon>ListPage.xaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\Products\DetailPage.xaml.cs">
+		  <DependentUpon>DetailPage.xaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\Products\ListPage.xaml.cs">
+		  <DependentUpon>ListPage.xaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\Products\DetailPage.xaml.cs">
+		  <DependentUpon>DetailPage.xaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Views\Products\DetailPage.xaml" />
+	  <AdditionalFiles Include="Views\Products\ListPage.xaml" />
 	</ItemGroup>
 </Project>

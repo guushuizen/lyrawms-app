@@ -6,6 +6,8 @@ namespace Tests;
 
 public class AuthorizedAPIServiceTests
 {
+
+    private AuthorizedAPIService _apiService = new(new AuthenticationService());
     
     private string GetFileContents(string resourceFile)
     {
@@ -24,10 +26,8 @@ public class AuthorizedAPIServiceTests
     [Fact]
     public void TestParsePicklistResponse()
     {
-        var client = new AuthorizedAPIService(new AuthenticationService());
-
         string body = GetFileContents("picklistResponse.json");
-        FullPicklist parsed = client.DeserializeJson<FullPicklist>(body, "picklist");
+        FullPicklist parsed = _apiService.DeserializeJson<FullPicklist>(body, "picklist");
         
         Assert.Equal(parsed.Id, 6713);
         Assert.Equal(parsed.Order.Reference, "O2023-04505");
@@ -37,12 +37,21 @@ public class AuthorizedAPIServiceTests
     [Fact]
     public void TestParsePicklistListResponse()
     {
-        var client = new AuthorizedAPIService(new AuthenticationService());
-
         string body = GetFileContents("picklistListResponse.json");
-        List<Picklist> parsed = client.DeserializeJson<List<Picklist>>(body, "rows");
+        List<Picklist> parsed = _apiService.DeserializeJson<List<Picklist>>(body, "rows");
 
         Assert.Equal(parsed[0].Id, 6716);
         Assert.Equal(parsed[0].Customer, "Bart Spilt");
+    }
+
+    [Fact]
+    public void TestDotInFulfilmentClientName()
+    {
+        string body = GetFileContents("productListResponse.json");
+        List<Product> parsedProducts =
+            _apiService.DeserializeJson<List<Product>>(body, "rows");
+        
+        Assert.Null(parsedProducts[0].FulfilmentClientName);
+        Assert.Equal(parsedProducts[3].FulfilmentClientName, "Smederij Recers CV");
     }
 }

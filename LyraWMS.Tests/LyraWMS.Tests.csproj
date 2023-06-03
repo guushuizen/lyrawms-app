@@ -35,6 +35,10 @@
       <EmbeddedResource Include="Resources\picklistListResponse.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Resources\productListResponse.json" />
+      <EmbeddedResource Include="Resources\productListResponse.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

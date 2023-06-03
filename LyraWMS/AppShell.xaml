@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:LyraWMS.Views"
     xmlns:picklistsViews="clr-namespace:LyraWMS.Views.Picklists"
+    xmlns:productsViews="clr-namespace:LyraWMS.Views.Products"
     FlyoutBehavior="Disabled">
 
     <TabBar>
@@ -21,6 +22,13 @@
                 Title="Picklists"
                 ContentTemplate="{DataTemplate picklistsViews:ListPage}"
                 Route="PicklistsListPage" />
+        </Tab>
+        
+        <Tab Title="Producten" Icon="products.png">
+            <ShellContent
+                Title="Producten"
+                ContentTemplate="{DataTemplate productsViews:ListPage}"
+                Route="ProductsListPage" />
         </Tab>
     </TabBar>
     
