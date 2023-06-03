@@ -1,6 +1,9 @@
 using System.Net;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using LyraWMS.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LyraWMS.Services;
 
@@ -68,11 +71,9 @@ public class PicklistService
         {
             return null;
         }
-        
-        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-        FullPicklist picklist = _apiService.DeserializeJson<FullPicklist>(body["picklist"].ToJsonString());
-        
-        return picklist;
+        var responseBody = JsonNode.Parse(await response.Content.ReadAsStringAsync());
+
+        return _apiService.DeserializeJson<FullPicklist>(responseBody["picklist"].ToJsonString());
     }
 }

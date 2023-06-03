@@ -44,7 +44,7 @@ public class DetailViewModel : BaseViewModel
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
-        DecreasePickedProductQuantityCommand = new Command((product) => DecreasePickedProductQuantity((Product) product));
+        DecreasePickedProductQuantityCommand = new Command(product => DecreasePickedProductQuantity((Product) product));
     }
 
     private async Task Initialize()
@@ -52,11 +52,6 @@ public class DetailViewModel : BaseViewModel
         FullPicklist = await _picklistService.GetFullPicklist(Picklist.Uuid);
         
         Loading = false;
-    }
-
-    private async Task GoBack()
-    {
-        await Shell.Current.Navigation.PopAsync();
     }
 
     private async Task OpenBarcodePopup()
