@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using JorgeSerrano.Json;
 using LyraWMS.Models;
 
 namespace LyraWMS.Services;
@@ -55,12 +56,20 @@ public class AuthorizedAPIService
 
         return response;
     }
-    
-    public TValue DeserializeJson<TValue>(string jsonObject)
+
+    public TValue DeserializeJson<TValue>(string jsonObject, string? rootKey = null)
     {
-        return JsonSerializer.Deserialize<TValue>(jsonObject, new JsonSerializerOptions
+        string jsonToDeserialize = jsonObject;
+        if (rootKey != null)
         {
-            PropertyNameCaseInsensitive = true
+            JsonNode node = JsonNode.Parse(jsonToDeserialize);
+            jsonToDeserialize = node[rootKey].ToString(); 
+        }
+        
+        return JsonSerializer.Deserialize<TValue>(jsonToDeserialize, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
         });
     }
 

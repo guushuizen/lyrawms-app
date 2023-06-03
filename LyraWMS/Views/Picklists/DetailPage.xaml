@@ -115,6 +115,8 @@
                                 <FlexLayout
                                     Direction="Row"
                                     JustifyContent="SpaceBetween"
+                                    AlignItems="Center"
+                                    AlignContent="Center"
                                     HorizontalOptions="Fill">
                                     <VerticalStackLayout>
                                         <Label 
@@ -129,18 +131,32 @@
                                             Text="{Binding Sku, StringFormat='SKU: {0}'}"/>
                                     </VerticalStackLayout>
                                     
-                                    <VerticalStackLayout>
-                                        <controls:PickableProduct
-                                            ProductUuid="{Binding Uuid}"
-                                            ProductQuantity="{Binding Pivot.Amount}" />
-                                    
+                                    <HorizontalStackLayout
+                                        FlexLayout.AlignSelf="Center">
                                         <Button
+                                            Margin="0,0,10,0"
                                             HorizontalOptions="Center"
                                             Command="{Binding Path=DecreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
                                             CommandParameter="{Binding}" 
                                             Text="-"
+                                            Padding="1"
                                             TextColor="{StaticResource White}" />
-                                    </VerticalStackLayout>
+
+                                        <controls:PickableProduct
+                                            VerticalOptions="Center"
+                                            ProductUuid="{Binding Uuid}"
+                                            ProductQuantity="{Binding Pivot.Amount}" />
+                                        
+                                        <Button
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Command="{Binding Path=IncreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            CommandParameter="{Binding}" 
+                                            Text="+"
+                                            Padding="1"
+                                            TextColor="{StaticResource White}" />
+
+                                    </HorizontalStackLayout>
                                 </FlexLayout>
                                                               
                             </DataTemplate>

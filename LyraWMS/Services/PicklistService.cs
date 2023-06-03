@@ -33,9 +33,10 @@ public class PicklistService
 
         HttpResponseMessage response = await _apiService.GetAsync("/picklists");
 
-        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
-
-        List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(body["rows"].ToJsonString());
+        List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(
+            await response.Content.ReadAsStringAsync(),
+            "rows"
+        );
             
         _picklists.AddRange(picklists);
 
@@ -51,16 +52,14 @@ public class PicklistService
         
         HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}");
 
-        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
+        var picklists = _apiService.DeserializeJson<List<Picklist>>(await response.Content.ReadAsStringAsync(), "rows");
 
-        if (body["rows"].AsArray().Count == 0)
+        if (picklists.Count == 0)
             return null;
-
-        picklist = _apiService.DeserializeJson<Picklist>(body["rows"][0].ToJsonString());
         
-        _picklists.Add(picklist);
+        _picklists.Add(picklists.First());
 
-        return picklist;
+        return picklists.First();
     }
 
     public async Task<FullPicklist?> GetFullPicklist(string picklistUuid)
@@ -72,8 +71,6 @@ public class PicklistService
             return null;
         }
 
-        var responseBody = JsonNode.Parse(await response.Content.ReadAsStringAsync());
-
-        return _apiService.DeserializeJson<FullPicklist>(responseBody["picklist"].ToJsonString());
+        return _apiService.DeserializeJson<FullPicklist>(await response.Content.ReadAsStringAsync(), "picklist");
     }
 }

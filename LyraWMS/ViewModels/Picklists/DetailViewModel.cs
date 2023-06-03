@@ -35,6 +35,7 @@ public class DetailViewModel : BaseViewModel
     public ICommand OpenBarcodePopupCommand { get; set; }
     
     public ICommand DecreasePickedProductQuantityCommand { get; set; }
+    public ICommand IncreasePickedProductQuantityCommand { get; set; }
 
     public DetailViewModel(PicklistService picklistService)
     {
@@ -45,6 +46,7 @@ public class DetailViewModel : BaseViewModel
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
         DecreasePickedProductQuantityCommand = new Command(product => DecreasePickedProductQuantity((Product) product));
+        IncreasePickedProductQuantityCommand = new Command(product => IncreasePickedProductQuantity((Product) product));
     }
 
     private async Task Initialize()
@@ -64,6 +66,11 @@ public class DetailViewModel : BaseViewModel
     private void DecreasePickedProductQuantity(Product product)
     {
         WeakReferenceMessenger.Default.Send(new ProductUnpickedMessage(product));
+    }
+    
+    private void IncreasePickedProductQuantity(Product product)
+    {
+        WeakReferenceMessenger.Default.Send(new ProductPickedMessage(product));
     }
     
     private async Task OnBarcodeScanned(string sku)

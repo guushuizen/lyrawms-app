@@ -47,7 +47,8 @@ public partial class PickableProduct : ContentView
     {
         if (message.Product.Uuid == ProductUuid)
         {
-            PickedQuantity += 1;
+            if (PickedQuantity < ProductQuantity)
+                PickedQuantity += 1;
         }
     }
     
@@ -55,7 +56,8 @@ public partial class PickableProduct : ContentView
     {
         if (message.Product.Uuid == ProductUuid)
         {
-            PickedQuantity -= 1;
+            if (PickedQuantity > 0)
+                PickedQuantity -= 1;
         }
     }
 }
