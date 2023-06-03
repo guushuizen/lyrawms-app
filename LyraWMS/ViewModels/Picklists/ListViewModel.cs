@@ -44,8 +44,6 @@ public class ListViewModel : BaseViewModel
     
     private async Task OpenBarcodePopup()
     {
-        await BarcodeScanner.Mobile.Methods.AskForRequiredPermission();
-
         await Shell.Current.Navigation.PushModalAsync(new BarcodePage(
             new Command(barcode => GoToPicklistCommand.Execute((string)barcode))
         ));

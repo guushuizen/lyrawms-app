@@ -4,13 +4,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:gv="clr-namespace:BarcodeScanner.Mobile;assembly=BarcodeScanner.Mobile.Maui"
              x:Class="LyraWMS.Views.BarcodePage">
-    <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <gv:CameraView
-	        HorizontalOptions="FillAndExpand" 
-	        VerticalOptions="FillAndExpand" 
-	        OnDetected="OnBarcodeDetected"
-            TorchOn="False" 
-	        VibrationOnDetected="True" 
-	        ScanInterval="500"/>
+    <ScrollView
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"
+        x:Name="View">
+        
     </ScrollView>
 </ContentPage>

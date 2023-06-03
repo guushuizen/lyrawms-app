@@ -1,5 +1,7 @@
 using System.Windows.Input;
+#if IOS
 using BarcodeScanner.Mobile;
+#endif
 
 namespace LyraWMS.Views;
 
@@ -9,13 +11,29 @@ public partial class BarcodePage : ContentPage
     
     public BarcodePage(ICommand onBarcodeScannedCommand)
     {
+#if IOS
+        Task.Run(BarcodeScanner.Mobile.Methods.AskForRequiredPermission);
         BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128);
 
+        var cameraView = new CameraView
+        {
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.FillAndExpand,
+            TorchOn = false,
+            VibrationOnDetected = true,
+            ScanInterval = 500
+        };
+        
+        cameraView.OnDetected += OnBarcodeDetected;
+        View.Content = cameraView;
+#endif
+        
         InitializeComponent();
 
         _onBarcodeScannedCommand = onBarcodeScannedCommand;
     }
 
+#if IOS
     private void OnBarcodeDetected(object sender, OnDetectedEventArg e)
     {
         var barcode = e.BarcodeResults;
@@ -27,4 +45,5 @@ public partial class BarcodePage : ContentPage
 
         _onBarcodeScannedCommand.Execute(barcode[0].DisplayValue);
     }
+#endif
 }

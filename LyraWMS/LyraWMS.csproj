@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-ios</TargetFrameworks>
+		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>LyraWMS</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -48,6 +48,17 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	  <MtouchLink>SdkOnly</MtouchLink>
+		<ProvisionType>Manual</ProvisionType>
+		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
+		<CodesignEntitlement>Platforms/MacCatalyst/Entitlements.plist</CodesignEntitlement>
+		<CodesignKey>Apple Development: guus@guus.tech (NR7P94BT9B)</CodesignKey>
+		<CodesignProvision>Mac Catalyst Team Provisioning Profile: tech.guus.LyraWMS</CodesignProvision>
+		<_LibMonoLinkMode>Static</_LibMonoLinkMode>
+		<_LibXamarinLinkMode>Static</_LibXamarinLinkMode>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
