@@ -1,7 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
-using LyraWMS.Controls.ViewModels;
 using LyraWMS.Messages;
-using LyraWMS.Models;
 
 namespace LyraWMS.Controls;
 

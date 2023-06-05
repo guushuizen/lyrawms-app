@@ -3,7 +3,6 @@ using CommunityToolkit.Maui;
 using BarcodeScanner.Mobile;
 using CommunityToolkit.Maui.Markup;
 using LyraWMS.Controls;
-using LyraWMS.Controls.ViewModels;
 using LyraWMS.Services;
 using LyraWMS.ViewModels;
 
@@ -54,7 +53,6 @@ public static class MauiProgram
 		builder.Services.AddTransient<PicklistViewModels.DetailViewModel>();
 
 		builder.Services.AddTransient<PickableProduct>();
-		builder.Services.AddTransient<PickableProductViewModel>();
 
 		builder.Services.AddSingleton<AuthorizedAPIService>();
 		builder.Services.AddSingleton<AuthenticationService>();
