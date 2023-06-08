@@ -1,4 +1,5 @@
 ﻿using LyraWMS.Views.Picklists;
+using LyraWMS.Views.Products;
 
 namespace LyraWMS;
 
@@ -8,7 +9,8 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 		
-		Routing.RegisterRoute(nameof(DetailPage), typeof(DetailPage));
+		Routing.RegisterRoute(nameof(PicklistDetailPage), typeof(PicklistDetailPage));
+		Routing.RegisterRoute(nameof(ProductDetailPage), typeof(ProductDetailPage));
 	}
 }
 

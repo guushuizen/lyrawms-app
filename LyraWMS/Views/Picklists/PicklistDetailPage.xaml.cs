@@ -7,9 +7,9 @@ using LyraWMS.ViewModels.Picklists;
 
 namespace LyraWMS.Views.Picklists;
 
-public partial class DetailPage : ContentPage
+public partial class PicklistDetailPage : ContentPage
 {
-    public DetailPage(DetailViewModel viewModel)
+    public PicklistDetailPage(DetailViewModel viewModel)
     {
         InitializeComponent();
 

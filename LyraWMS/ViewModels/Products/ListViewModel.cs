@@ -65,7 +65,7 @@ public class ListViewModel : BaseViewModel
             return;
         }
 
-        await Shell.Current.GoToAsync(nameof(DetailPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(ProductDetailPage), new Dictionary<string, object>
         {
             { nameof(Product), product }
         });

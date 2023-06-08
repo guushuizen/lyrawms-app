@@ -66,7 +66,7 @@ public class ListViewModel : BaseViewModel
             return;
         }
 
-        await Shell.Current.GoToAsync(nameof(DetailPage), new Dictionary<string, object>
+        await Shell.Current.GoToAsync(nameof(PicklistDetailPage), new Dictionary<string, object>
         {
             { nameof(Picklist), picklist }
         });

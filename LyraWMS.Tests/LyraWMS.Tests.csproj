@@ -39,6 +39,7 @@
       <EmbeddedResource Include="Resources\productListResponse.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="Resources\productResponse.json" />
     </ItemGroup>
 
 </Project>

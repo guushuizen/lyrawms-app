@@ -31,7 +31,7 @@ public class PicklistService
             return _picklists.GetRange(_currentPage * ROWS_PER_PAGE, ROWS_PER_PAGE);
         }
 
-        HttpResponseMessage response = await _apiService.GetAsync("/picklists");
+        HttpResponseMessage response = await _apiService.GetAsync("/picklists?modifiers[filters][status]=open");
 
         List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(
             await response.Content.ReadAsStringAsync(),
@@ -71,6 +71,8 @@ public class PicklistService
             return null;
         }
 
-        return _apiService.DeserializeJson<FullPicklist>(await response.Content.ReadAsStringAsync(), "picklist");
+        var content = await response.Content.ReadAsStringAsync();
+
+        return _apiService.DeserializeJson<FullPicklist>(content, "picklist");
     }
 }

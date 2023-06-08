@@ -8,27 +8,20 @@ using LyraWMS.Views;
 
 namespace LyraWMS.ViewModels.Products;
 
-[QueryProperty(nameof(Picklist), "Picklist")]
+[QueryProperty(nameof(Product), "Product")]
 public class DetailViewModel : BaseViewModel
 {
-    private FullPicklist _fullPicklist;
-    public FullPicklist FullPicklist
+    private Product _product;
+    public Product Product
     {
-        get => _fullPicklist;
-        set => SetProperty(ref _fullPicklist, value);
-    }
-    
-    private Picklist _picklist;
-    public Picklist Picklist
-    {
-        get => _picklist;
+        get => _product;
         set {
-            SetProperty(ref _picklist, value);
-            Task.Run(Initialize);
+            SetProperty(ref _product, value);
+            Loading = false;
         }
     }
     
-    private readonly PicklistService _picklistService;
+    private readonly ProductService _productService;
 
     public ObservableCollection<KeyValuePair<string, int>> PickedQuantites { get; set; } = new();
     
@@ -37,23 +30,14 @@ public class DetailViewModel : BaseViewModel
     public ICommand DecreasePickedProductQuantityCommand { get; set; }
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
 
-    public DetailViewModel(PicklistService picklistService)
+    public DetailViewModel(ProductService productService)
     {
-        Loading = true;
-        
-        _picklistService = picklistService;
+        _productService = productService;
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
         DecreasePickedProductQuantityCommand = new Command(product => DecreasePickedProductQuantity((Product) product));
         IncreasePickedProductQuantityCommand = new Command(product => IncreasePickedProductQuantity((Product) product));
-    }
-
-    private async Task Initialize()
-    {
-        FullPicklist = await _picklistService.GetFullPicklist(Picklist.Uuid);
-        
-        Loading = false;
     }
 
     private async Task OpenBarcodePopup()
@@ -75,13 +59,6 @@ public class DetailViewModel : BaseViewModel
     
     private async Task OnBarcodeScanned(string sku)
     {
-        Product? product = FullPicklist.Products.Find(p => p.Sku == sku);
-
-        if (product != null)
-        {
-            WeakReferenceMessenger.Default.Send(new ProductPickedMessage(product));
-        }
-
         await Application.Current.MainPage.Navigation.PopModalAsync();
     }
 }

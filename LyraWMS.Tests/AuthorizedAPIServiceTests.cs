@@ -29,9 +29,9 @@ public class AuthorizedAPIServiceTests
         string body = GetFileContents("picklistResponse.json");
         FullPicklist parsed = _apiService.DeserializeJson<FullPicklist>(body, "picklist");
         
-        Assert.Equal(parsed.Id, 6713);
-        Assert.Equal(parsed.Order.Reference, "O2023-04505");
-        Assert.Equal(parsed.ShippingAddress.Fullname, "Bart Spilt");
+        Assert.Equal(parsed.Id, 62);
+        Assert.Equal(parsed.Order.Reference, "O2022-00097");
+        Assert.Equal(parsed.ShippingAddress.Fullname, "ir. Nadine van Maasgouw");
     }
     
     [Fact]
@@ -45,13 +45,16 @@ public class AuthorizedAPIServiceTests
     }
 
     [Fact]
-    public void TestDotInFulfilmentClientName()
+    public void TestProductListResponseParsing()
     {
         string body = GetFileContents("productListResponse.json");
         List<Product> parsedProducts =
             _apiService.DeserializeJson<List<Product>>(body, "rows");
         
         Assert.Null(parsedProducts[0].FulfilmentClientName);
-        Assert.Equal(parsedProducts[3].FulfilmentClientName, "Smederij Recers CV");
+        Assert.Equal("Smederij Recers CV", parsedProducts[3].FulfilmentClientName);
+        
+        Assert.Equal(2033, parsedProducts[0].ProductLocations[0].Stock);
+        Assert.Equal(2033, parsedProducts[0].TotalStock);
     }
 }

@@ -49,7 +49,7 @@
                 TextColor="{StaticResource Primary}"
                 Text="{Binding User.Name, StringFormat='Welkom, {0}'}"
                 HorizontalOptions="Center"
-                FontAttributes="Bold"
+                FontFamily="OpenSansBold"
                 FontSize="30"
                 Padding="0,20" />
 
