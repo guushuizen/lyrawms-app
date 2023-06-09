@@ -6,19 +6,15 @@
              x:Class="LyraWMS.Views.Dashboard"
              x:DataType="viewModels:DashboardViewModel">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding LogoutCommand}">
-            <ToolbarItem.IconImageSource>
-                <OnPlatform x:TypeArguments="ImageSource">
-                    <On Platform="Android, WinUI, iOS" Value="logout.png" />
-                </OnPlatform>
-            </ToolbarItem.IconImageSource>
+        <ToolbarItem 
+            Command="{Binding LogoutCommand}"
+            IconImageSource="logout.png">
         </ToolbarItem>
     </ContentPage.ToolbarItems> 
     <FlexLayout
         Direction="Column"
         AlignContent="Center"
-        JustifyContent="SpaceBetween"
-        >
+        JustifyContent="SpaceBetween">
         <ActivityIndicator
             IsRunning="True"
             Color="{StaticResource Primary}"

@@ -55,6 +55,8 @@ public class LoginPageViewModel : BaseViewModel
         else
         {
             await Shell.Current.GoToAsync($"//{nameof(Dashboard)}");
+
+            ApiToken = Subdomain = "";
         }
     }
 }

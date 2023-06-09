@@ -1,8 +1,6 @@
-using System.Collections.ObjectModel;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using LyraWMS.Messages;
 using LyraWMS.Models;
+using LyraWMS.Models.ObservableModels;
 using LyraWMS.Services;
 using LyraWMS.Views;
 
@@ -11,8 +9,8 @@ namespace LyraWMS.ViewModels.Picklists;
 [QueryProperty(nameof(Picklist), "Picklist")]
 public class DetailViewModel : BaseViewModel
 {
-    private FullPicklist _fullPicklist;
-    public FullPicklist FullPicklist
+    private ObservablePicklist _fullPicklist;
+    public ObservablePicklist FullPicklist
     {
         get => _fullPicklist;
         set => SetProperty(ref _fullPicklist, value);
@@ -30,10 +28,7 @@ public class DetailViewModel : BaseViewModel
     
     private readonly PicklistService _picklistService;
 
-    public ObservableCollection<KeyValuePair<string, int>> PickedQuantites { get; set; } = new();
-    
     public ICommand OpenBarcodePopupCommand { get; set; }
-    
     public ICommand DecreasePickedProductQuantityCommand { get; set; }
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
 
@@ -45,13 +40,13 @@ public class DetailViewModel : BaseViewModel
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
-        DecreasePickedProductQuantityCommand = new Command(product => DecreasePickedProductQuantity((Product) product));
-        IncreasePickedProductQuantityCommand = new Command(product => IncreasePickedProductQuantity((Product) product));
+        DecreasePickedProductQuantityCommand = new Command(sku => DecreasePickedProductQuantity((string) sku));
+        IncreasePickedProductQuantityCommand = new Command(sku => IncreasePickedProductQuantity((string) sku));
     }
 
     private async Task Initialize()
     {
-        FullPicklist = await _picklistService.GetFullPicklist(Picklist.Uuid);
+        FullPicklist = new ObservablePicklist(await _picklistService.GetFullPicklist(Picklist.Uuid));
         
         Loading = false;
     }
@@ -63,24 +58,29 @@ public class DetailViewModel : BaseViewModel
         ));
     }
 
-    private void DecreasePickedProductQuantity(Product product)
+    private void DecreasePickedProductQuantity(string barcode)
     {
-        WeakReferenceMessenger.Default.Send(new ProductUnpickedMessage(product));
+        ObservableProduct? product = FullPicklist.Products.FirstOrDefault(p => p.Sku == barcode);
+
+        if (product != null && product.PickedQuantity > 0)
+        {
+            FullPicklist.Products.First(p => p.Sku == barcode).PickedQuantity--;
+        }
     }
-    
-    private void IncreasePickedProductQuantity(Product product)
+
+    private void IncreasePickedProductQuantity(string barcode)
     {
-        WeakReferenceMessenger.Default.Send(new ProductPickedMessage(product));
+        ObservableProduct? product = FullPicklist.Products.FirstOrDefault(p => p.Sku == barcode);
+
+        if (product != null && product.PickedQuantity < product.PickableQuantity)
+        {
+            FullPicklist.Products.First(p => p.Sku == barcode).PickedQuantity++;
+        }
     }
     
     private async Task OnBarcodeScanned(string sku)
     {
-        Product? product = FullPicklist.Products.Find(p => p.Sku == sku);
-
-        if (product != null)
-        {
-            WeakReferenceMessenger.Default.Send(new ProductPickedMessage(product));
-        }
+        FullPicklist.IncreaseProductQuantity(sku);
 
         await Application.Current.MainPage.Navigation.PopModalAsync();
     }

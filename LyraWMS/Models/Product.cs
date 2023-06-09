@@ -21,4 +21,10 @@ public class Product
     public string FulfilmentClientName { get; set; }
     public Pivot? Pivot { get; set; }
     public List<ProductLocation> ProductLocations { get; set; }
+
+    
+    // Custom state for the Application, not included in API Responses.
+    public int PickedQuantity { get; set; } = 0;
+
+    public string PickedQuantityString => $"{PickedQuantity}/{Pivot!.Amount}";
 }
