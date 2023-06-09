@@ -27,19 +27,26 @@ public class ListViewModel : BaseViewModel
     {
         _picklistService = picklistService;
 
-        Loading = true;
-        
         Task.Run(Initialize);
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
         GoToPicklistCommand = new Command(async (picklistId) => await GoToPicklist((string) picklistId));
     }
-
-    private async Task Initialize()
+    
+    public async Task Initialize()
     {
+        Loading = true;
+
         Picklists = await _picklistService.GetPicklists();
 
         Loading = false;
+    }
+
+    public void Clear()
+    {
+        Loading = true;
+
+        Picklists = new List<Picklist>();
     }
     
     private async Task OpenBarcodePopup()

@@ -39,15 +39,15 @@ public static class MauiProgram
 		builder.Services.AddTransient<DashboardViewModel>();
 		builder.Services.AddTransient<Dashboard>();
 
-		builder.Services.AddScoped<ProductViewModels.ListViewModel>();
-		builder.Services.AddScoped<ProductViews.ListPage>();
+		builder.Services.AddTransient<ProductViewModels.ListViewModel>();
+		builder.Services.AddTransient<ProductViews.ListPage>();
 		builder.Services.AddTransient<ProductViewModels.DetailViewModel>();
 		builder.Services.AddTransient<ProductViews.ProductDetailPage>();
 	
 		builder.Services.AddTransient<BarcodePage>();
 
-		builder.Services.AddScoped<PicklistViews.ListPage>();
-		builder.Services.AddScoped<PicklistViewModels.ListViewModel>();
+		builder.Services.AddTransient<PicklistViews.ListPage>();
+		builder.Services.AddTransient<PicklistViewModels.ListViewModel>();
 		builder.Services.AddTransient<PicklistViews.PicklistDetailPage>();
 		builder.Services.AddTransient<PicklistViewModels.DetailViewModel>();
 

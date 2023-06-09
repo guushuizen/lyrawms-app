@@ -1,4 +1,7 @@
+using System.ComponentModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Mvvm.Input;
 using LyraWMS.Models;
 using LyraWMS.Models.ObservableModels;
 using LyraWMS.Services;
@@ -28,20 +31,35 @@ public class DetailViewModel : BaseViewModel
     
     private readonly PicklistService _picklistService;
 
+    private bool _isPicklistReady;
+    public bool IsPicklistReady
+    {
+        get => _isPicklistReady;
+        set => SetProperty(ref _isPicklistReady, value);
+    }
+
     public ICommand OpenBarcodePopupCommand { get; set; }
     public ICommand DecreasePickedProductQuantityCommand { get; set; }
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
+    
+    public ICommand CompletePicklistCommand { get; set; }
 
     public DetailViewModel(PicklistService picklistService)
     {
         Loading = true;
         
         _picklistService = picklistService;
-
+        
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
         DecreasePickedProductQuantityCommand = new Command(sku => DecreasePickedProductQuantity((string) sku));
         IncreasePickedProductQuantityCommand = new Command(sku => IncreasePickedProductQuantity((string) sku));
+        CompletePicklistCommand = new AsyncRelayCommand(async () => await CompletePicklist());
+    }
+
+    private void DeterminePicklistReadiness()
+    {
+        IsPicklistReady = FullPicklist.Products.All(p => p.PickedQuantity == p.PickableQuantity);
     }
 
     private async Task Initialize()
@@ -65,6 +83,7 @@ public class DetailViewModel : BaseViewModel
         if (product != null && product.PickedQuantity > 0)
         {
             FullPicklist.Products.First(p => p.Sku == barcode).PickedQuantity--;
+            DeterminePicklistReadiness();
         }
     }
 
@@ -75,13 +94,38 @@ public class DetailViewModel : BaseViewModel
         if (product != null && product.PickedQuantity < product.PickableQuantity)
         {
             FullPicklist.Products.First(p => p.Sku == barcode).PickedQuantity++;
+            DeterminePicklistReadiness();
         }
     }
     
     private async Task OnBarcodeScanned(string sku)
     {
-        FullPicklist.IncreaseProductQuantity(sku);
+        IncreasePickedProductQuantity(sku);
 
         await Application.Current.MainPage.Navigation.PopModalAsync();
+    }
+
+    private async Task CompletePicklist()
+    {
+        var result = await Shell.Current.DisplayAlert("Weet je het zeker?",
+            "Je staat op het punt deze picklijst af te ronden.", "Ja", "Nee");
+
+        if (!result)
+            return;
+
+        if (await _picklistService.CompletePicklist(FullPicklist))
+        {
+            await Shell.Current.GoToAsync("..");
+
+            await Shell.Current.DisplaySnackbar($"Picklijst {FullPicklist.Reference} is afgerond!");
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert(
+                "Oops",
+                "Er is iets fout gegaan tijdens het afronden van de picklijst. Probeer het later nogmaals of neem anders contact op met LyraWMS",
+                "OK"
+            );
+        }
     }
 }

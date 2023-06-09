@@ -22,18 +22,6 @@ public class ObservablePicklist : ObservableObject
     public ShippingAddress ShippingAddress => _picklist.ShippingAddress;
     public Order Order => _picklist.Order;
     public string Status => _picklist.Status;
-
-    public void IncreaseProductQuantity(string sku)
-    {
-        Products.First(p => p.Sku == sku).PickedQuantity++;
-
-        OnPropertyChanged();
-    }
-    
-    public void DecreaseProductQuantity(string sku)
-    {
-        Products.First(p => p.Sku == sku).PickedQuantity--;
-
-        OnPropertyChanged();
-    }
+    public string Uuid => _picklist.Uuid;
+    public int Id => _picklist.Id;
 }

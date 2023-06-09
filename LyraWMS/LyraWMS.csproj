@@ -137,4 +137,8 @@
 	<ItemGroup>
 	  <AdditionalFiles Include="Views\Products\ListPage.xaml" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Exceptions" />
+	</ItemGroup>
 </Project>

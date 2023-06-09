@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using LyraWMS.Models;
+using LyraWMS.Models.ObservableModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,53 +12,31 @@ public class PicklistService
 {
     private readonly AuthorizedAPIService _apiService;
 
-    private List<Picklist> _picklists;
-
-    private readonly int ROWS_PER_PAGE = 25;
-    
-    private int _currentPage = 0;
-
     public PicklistService(AuthorizedAPIService apiService)
     {
         _apiService = apiService;
-        
-        _picklists = new List<Picklist>();
     }
 
-    public async Task<List<Picklist>> GetPicklists(bool newPage = false)
+    public async Task<List<Picklist>> GetPicklists(int page = 0)
     {
-        if (!newPage && _currentPage != 0)
-        {
-            return _picklists.GetRange(_currentPage * ROWS_PER_PAGE, ROWS_PER_PAGE);
-        }
-
-        HttpResponseMessage response = await _apiService.GetAsync("/picklists?modifiers[filters][status]=open");
+        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?modifiers[filters][status]=open&page={page}");
 
         List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(
             await response.Content.ReadAsStringAsync(),
             "rows"
         );
             
-        _picklists.AddRange(picklists);
-
         return picklists;
     }
 
     public async Task<Picklist?> FindPicklist(string picklistId)
     {
-        Picklist? picklist = _picklists.FirstOrDefault(p => p.Reference == picklistId);
-
-        if (picklist != null)
-            return picklist;
-        
         HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}");
 
         var picklists = _apiService.DeserializeJson<List<Picklist>>(await response.Content.ReadAsStringAsync(), "rows");
 
         if (picklists.Count == 0)
             return null;
-        
-        _picklists.Add(picklists.First());
 
         return picklists.First();
     }
@@ -74,5 +53,12 @@ public class PicklistService
         var content = await response.Content.ReadAsStringAsync();
 
         return _apiService.DeserializeJson<FullPicklist>(content, "picklist");
+    }
+
+    public async Task<bool> CompletePicklist(ObservablePicklist fullPicklist)
+    {
+        HttpResponseMessage response = await _apiService.PutAsync($"/picklist/{fullPicklist.Id}/complete-current-stage");
+
+        return response.IsSuccessStatusCode;
     }
 }

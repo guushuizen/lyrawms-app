@@ -56,6 +56,18 @@ public class AuthorizedAPIService
 
         return response;
     }
+    
+    public async Task<HttpResponseMessage> PutAsync(string uri, JsonContent? jsonContent = null)
+    {
+        await InitializeClient();
+
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(uri, jsonContent);
+
+        await AssertAuthSuccess(response);
+
+        return response;
+    }
+
 
     public TValue DeserializeJson<TValue>(string jsonObject, string? rootKey = null)
     {

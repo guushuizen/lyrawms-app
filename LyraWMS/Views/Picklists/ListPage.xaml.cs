@@ -9,5 +9,9 @@ public partial class ListPage : ContentPage
         InitializeComponent();
 
         BindingContext = viewModel;
+        
+        NavigatedTo += (sender, args) => Task.Run(((ListViewModel)BindingContext).Initialize);
+
+        NavigatedFrom += (sender, args) => ((ListViewModel)BindingContext).Clear();
     }
 }
