@@ -28,18 +28,17 @@ public partial class App : Application
 
                 var (subdomain, apiToken) = task.Result;
 
-                if (!string.IsNullOrWhiteSpace(subdomain) && !string.IsNullOrWhiteSpace(apiToken))
+                if (string.IsNullOrWhiteSpace(subdomain) || string.IsNullOrWhiteSpace(apiToken))
                 {
-                    bool result = await _authenticationService.AttemptLogin(subdomain, apiToken);
-                    
-                    if (result) {
-                        await Shell.Current.GoToAsync($"///{nameof(Dashboard)}");
-
-                        return;
-                    }
+                    await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
+                    return;
                 }
 
-                await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
+                bool result = await _authenticationService.AttemptLogin(subdomain, apiToken);
+                
+                if (!result) {
+                    await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
+                }
             });
         });
         
