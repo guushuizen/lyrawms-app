@@ -5,43 +5,18 @@ namespace LyraWMS;
 
 public partial class App : Application
 {
-    private readonly AuthenticationService _authenticationService;
-    
-    public App(AuthenticationService authenticationService)
+    public App(AuthenticationService authenticationService, IServiceProvider serviceProvider)
     {
-        _authenticationService = authenticationService;
-        
         InitializeComponent();
 
-        MainPage = new LoadingPage();
-    }
+        var user = Task.Run(authenticationService.GetCurrentUser).Result;
 
-    protected override void OnStart()
-    {
-        var task = _authenticationService.GetCredentials();
-
-        task.ContinueWith(task =>
+        if (user != null)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                MainPage = new AppShell();
-
-                var (subdomain, apiToken) = task.Result;
-
-                if (string.IsNullOrWhiteSpace(subdomain) || string.IsNullOrWhiteSpace(apiToken))
-                {
-                    await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
-                    return;
-                }
-
-                bool result = await _authenticationService.AttemptLogin(subdomain, apiToken);
-                
-                if (!result) {
-                    await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
-                }
-            });
-        });
-        
-        base.OnStart();
+            MainPage = new AppShell();
+        } else
+        {
+            MainPage = new LoginShell();
+        }
     }
 }

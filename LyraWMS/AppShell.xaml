@@ -9,7 +9,7 @@
     xmlns:productsViews="clr-namespace:LyraWMS.Views.Products"
     FlyoutBehavior="Disabled">
 
-    <TabBar>
+    <TabBar Route="Dashboard">
         <Tab Title="Dashboard" Icon="home.png">
             <ShellContent
                 Title="Dashboard"
@@ -33,7 +33,7 @@
     </TabBar>
     
     <ShellContent
-        Title="Home"
+        Title="Login"
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
 </Shell>

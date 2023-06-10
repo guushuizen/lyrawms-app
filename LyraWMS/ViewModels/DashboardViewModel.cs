@@ -2,6 +2,7 @@ using System.Text.Json.Nodes;
 using System.Windows.Input;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Views;
 
 namespace LyraWMS.ViewModels;
 
@@ -37,9 +38,16 @@ public class DashboardViewModel : BaseViewModel
     public async Task Initialize()
     {
         User = await _authenticationService.GetCurrentUser();
-        Statistics = await GetStatistics();
-        
-        Loading = false;
+        if (User == null)
+        {
+            await Logout();
+        }
+        else
+        {
+            Statistics = await GetStatistics();
+
+            Loading = false;
+        }
     }
 
     private async Task<DashboardStatistics> GetStatistics()
@@ -59,5 +67,7 @@ public class DashboardViewModel : BaseViewModel
     private async Task Logout()
     {
         await _authenticationService.Logout();
+        
+        Application.Current.MainPage = new LoginShell();
     }
 }

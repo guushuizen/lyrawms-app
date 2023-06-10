@@ -99,20 +99,23 @@
         </CollectionView.ItemTemplate>
         
         <CollectionView.EmptyView>
-            <VerticalStackLayout>
-                <Label 
-                    IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    Text="Je hebt nog geen picklists!"
-                    />
-                
-                <ActivityIndicator
-                    IsRunning="True"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    IsVisible="{Binding Loading}" />
-            </VerticalStackLayout>
+            <ContentView>
+                <VerticalStackLayout
+                    VerticalOptions="Fill" HorizontalOptions="Fill">
+                    <Label 
+                        IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        Text="Je hebt nog geen picklists!"
+                        />
+                    
+                    <ActivityIndicator
+                        IsRunning="True"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding Loading}" />
+                </VerticalStackLayout>
+            </ContentView>
         </CollectionView.EmptyView>
 
         <CollectionView.Footer>

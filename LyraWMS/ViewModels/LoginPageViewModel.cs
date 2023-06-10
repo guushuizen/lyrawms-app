@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using LyraWMS.Models;
 using LyraWMS.Services;
 using LyraWMS.Views;
 
@@ -7,8 +8,6 @@ namespace LyraWMS.ViewModels;
 
 public class LoginPageViewModel : BaseViewModel
 {
-    public event PropertyChangedEventHandler PropertyChanged;
-
     private readonly AuthenticationService _authenticationService;
 
     private string _subdomain;
@@ -46,15 +45,15 @@ public class LoginPageViewModel : BaseViewModel
 
     private async Task AttemptLogin()
     {
-        bool result = await _authenticationService.AttemptLogin(Subdomain, ApiToken);
+        User? user = await _authenticationService.AttemptLogin(Subdomain, ApiToken);
 
-        if (!result)
+        if (user == null)
         {
             await Application.Current.MainPage.DisplayAlert("Incorrecte gegevens", "De combinatie van subdomein en API token is niet juist.", "OK");
         }
         else
         {
-            await Shell.Current.GoToAsync($"//{nameof(Dashboard)}");
+            Application.Current.MainPage = new AppShell();
 
             ApiToken = Subdomain = "";
         }

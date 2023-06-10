@@ -105,6 +105,9 @@
 		<MauiXaml Update="Views\Products\ProductDetailPage.xaml">
 		  <SubType>Designer</SubType>
 		</MauiXaml>
+		<MauiXaml Update="LoginShell.xaml">
+		  <SubType>Designer</SubType>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -130,6 +133,10 @@
 		</Compile>
 		<Compile Update="Views\Products\DetailPage.xaml.cs">
 		  <DependentUpon>DetailPage.xaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
+		<Compile Update="LoginShell.xaml.cs">
+		  <DependentUpon>LoginShell.xaml</DependentUpon>
 		  <SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>

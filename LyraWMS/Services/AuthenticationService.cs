@@ -8,7 +8,7 @@ namespace LyraWMS.Services;
 
 public class AuthenticationService
 {
-    private User _user;
+    private User? _user;
 
     public async Task<User?> GetCurrentUser()
     {
@@ -16,24 +16,26 @@ public class AuthenticationService
         {
             return _user;
         }
-        else
+
+        var credentials = await GetCredentials();
+
+        if (credentials == null)
         {
-            var (subdomain, apiToken) = await GetCredentials();
+            return null;
+        }
 
-            if (!await AttemptLogin(subdomain, apiToken))
-            {
-                // If we're requesting a user while we're not logged in, something's wrong.
-                await Logout();
-                
-                return null;
-            }
-
+        User? user = await AttemptLogin(credentials.Item1, credentials.Item2);
+        if (user != null)
+        {
+            _user = user;
             return _user;
         }
+        
+        return null;
     }
 
 
-    public async Task<bool> AttemptLogin(string subdomain, string apiToken)
+    public async Task<User?> AttemptLogin(string subdomain, string apiToken)
     {
         // We don't recycle this one because we'll use different headers each time
         HttpClient httpClient = new HttpClient(new HttpClientHandler
@@ -57,18 +59,16 @@ public class AuthenticationService
 
                 var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-                _user = body["user"].Deserialize<User>(new JsonSerializerOptions
+                return body["user"].Deserialize<User>(new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
-
-                return true;
             }
         } catch {
             SecureStorage.RemoveAll();
         }
-
-        return false;
+        
+        return null;
     }
 
     private async Task StoreCredentials(string subdomain, string apiToken)
@@ -77,19 +77,19 @@ public class AuthenticationService
         await SecureStorage.SetAsync("apiToken", apiToken);
     }
 
-    public async Task<(string, string)> GetCredentials()
+    public async Task<Tuple<string, string>?> GetCredentials()
     {
         var subdomain = await SecureStorage.GetAsync("subdomain");
         var apiToken = await SecureStorage.GetAsync("apiToken");
 
-        if (subdomain is null || apiToken is null)
+        if (string.IsNullOrEmpty(subdomain) || string.IsNullOrEmpty(apiToken))
         {
             SecureStorage.RemoveAll();
 
-            return ("", "");
+            return null;
         }
 
-        return new ValueTuple<string, string>(subdomain, apiToken);
+        return new Tuple<string, string>(subdomain, apiToken);
     }
 
     public async Task Logout()
@@ -97,7 +97,5 @@ public class AuthenticationService
         SecureStorage.RemoveAll();
 
         _user = null;
-
-        await Shell.Current.GoToAsync($"///{nameof(LoginPage)}");
     }
 }

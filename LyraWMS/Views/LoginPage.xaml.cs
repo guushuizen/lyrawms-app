@@ -2,7 +2,7 @@
 
 namespace LyraWMS.Views;
 
-public partial class LoginPage : ContentPage
+public partial class LoginPage : ContentPage 
 {
     
     public LoginPage(LoginPageViewModel viewModel)
