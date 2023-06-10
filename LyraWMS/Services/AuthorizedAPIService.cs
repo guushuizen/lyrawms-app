@@ -46,7 +46,7 @@ public class AuthorizedAPIService
         return response;
     }
 
-    public async Task<HttpResponseMessage> PostAsync(string uri, JsonContent jsonContent)
+    public async Task<HttpResponseMessage> PostAsync(string uri, Dictionary<string, object> jsonContent)
     {
         await InitializeClient();
 
@@ -57,7 +57,7 @@ public class AuthorizedAPIService
         return response;
     }
     
-    public async Task<HttpResponseMessage> PutAsync(string uri, JsonContent? jsonContent = null)
+    public async Task<HttpResponseMessage> PutAsync(string uri, Dictionary<string, string> jsonContent = null)
     {
         await InitializeClient();
 

@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using LyraWMS.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Location = LyraWMS.Models.Location;
 
 namespace LyraWMS.Services;
 
@@ -38,5 +39,37 @@ public class ProductService
             return null;
         
         return products.First();
+    }
+
+    public async Task<List<Location>> GetAvailableLocations(Product product, Warehouse warehouse)
+    {
+        HttpResponseMessage response = await _apiService.GetAsync(
+            $"/warehouse/locations/available-fo-stock-allocation?product={product.Uuid}&warehouse={warehouse.Uuid}"
+        );
+        
+        List<Location> locations = _apiService.DeserializeJson<List<Location>>(await response.Content.ReadAsStringAsync(), "locations");
+
+        return locations;
+    }
+
+    public async Task<List<Warehouse>> GetWarehouses()
+    {
+        HttpResponseMessage response = await _apiService.GetAsync("/warehouses");
+
+        return _apiService.DeserializeJson<List<Warehouse>>(await response.Content.ReadAsStringAsync(), "warehouses");
+    }
+
+    public async Task<bool> MoveStock(Product product, int amount, Location newLocation, ProductLocation oldProductLocation)
+    {
+        var response = await _apiService.PostAsync(
+            $"/stock-move/{oldProductLocation.Id}",
+            new Dictionary<string, object>
+            {
+                {"to", newLocation.Uuid},
+                {"amount", amount},
+                {"instant", true}
+            });
+
+        return response.IsSuccessStatusCode;
     }
 }

@@ -31,7 +31,7 @@ public class PicklistService
 
     public async Task<Picklist?> FindPicklist(string picklistId)
     {
-        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}");
+        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}&modifiers[filters][status]=open");
 
         var picklists = _apiService.DeserializeJson<List<Picklist>>(await response.Content.ReadAsStringAsync(), "rows");
 

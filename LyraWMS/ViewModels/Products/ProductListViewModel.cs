@@ -78,9 +78,12 @@ public class ProductListViewModel : BaseViewModel
             return;
         }
 
-        await Shell.Current.GoToAsync(nameof(ProductDetailPage), new Dictionary<string, object>
-        {
-            { nameof(Product), product }
-        });
+        await Shell.Current.GoToAsync(
+            $"{nameof(ProductListPage)}/{nameof(ProductDetailPage)}",
+            new Dictionary<string, object>
+            {
+                { nameof(Product), product }
+            }
+        );
     }
 }

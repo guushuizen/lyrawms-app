@@ -32,8 +32,8 @@ public static class MauiProgram
 			.UseMauiCommunityToolkit()
 			.UseMauiCommunityToolkitMarkup();
 
-		builder.Services.AddScoped<LoginPageViewModel>();
-		builder.Services.AddScoped<LoginPage>();
+		builder.Services.AddTransient<LoginPageViewModel>();
+		builder.Services.AddTransient<LoginPage>();
 
 		builder.Services.AddTransient<DashboardViewModel>();
 		builder.Services.AddTransient<Dashboard>();
@@ -49,12 +49,14 @@ public static class MauiProgram
 		builder.Services.AddTransient<PicklistListViewModel>();
 		builder.Services.AddTransient<PicklistDetailPage>();
 		builder.Services.AddTransient<PicklistDetailViewModel>();
+		
+		builder.Services.AddTransient<TransferStockPage>();
+		builder.Services.AddTransient<TransferStockViewModel>();
 
 		builder.Services.AddSingleton<AuthorizedAPIService>();
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<PicklistService>();
 		builder.Services.AddSingleton<ProductService>();
-
 		
 #if DEBUG
 		builder.Logging.AddDebug();

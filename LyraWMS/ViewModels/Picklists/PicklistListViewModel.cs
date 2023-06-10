@@ -5,15 +5,16 @@ using LyraWMS.Models;
 using LyraWMS.Services;
 using LyraWMS.Views;
 using LyraWMS.Views.Picklists;
+using LyraWMS.Views.Products;
 
 namespace LyraWMS.ViewModels.Picklists;
 
 public class PicklistListViewModel : BaseViewModel
 {
-
     private readonly PicklistService _picklistService;
 
     private ObservableCollection<Picklist> _picklists;
+
     public ObservableCollection<Picklist> Picklists
     {
         get => _picklists;
@@ -25,7 +26,7 @@ public class PicklistListViewModel : BaseViewModel
     public ICommand OpenBarcodePopupCommand { get; set; }
     public ICommand GoToPicklistCommand { get; set; }
     public ICommand LoadMorePicklistsCommand { get; set; }
-    
+
     public PicklistListViewModel(PicklistService picklistService)
     {
         _picklistService = picklistService;
@@ -33,10 +34,10 @@ public class PicklistListViewModel : BaseViewModel
         Task.Run(Initialize);
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
-        GoToPicklistCommand = new Command(async (picklistId) => await GoToPicklist((string) picklistId));
+        GoToPicklistCommand = new Command(async (picklistId) => await GoToPicklist((string)picklistId));
         LoadMorePicklistsCommand = new Command(async () => await LoadMorePicklists());
     }
-    
+
     public async Task Initialize()
     {
         Loading = true;
@@ -53,7 +54,7 @@ public class PicklistListViewModel : BaseViewModel
 
         Picklists = new ObservableCollection<Picklist>();
     }
-    
+
     private async Task OpenBarcodePopup()
     {
         await Shell.Current.Navigation.PushModalAsync(new BarcodePage(
@@ -66,30 +67,33 @@ public class PicklistListViewModel : BaseViewModel
         Picklist? picklist = await _picklistService.FindPicklist(picklistId);
 
         await Shell.Current.Navigation.PopModalAsync();
-        
+
         if (picklist == null)
         {
             await Shell.Current.DisplayAlert(
                 "Niet gevonden",
-                "Een picklist met deze ID kon niet gevonden worden!",
+                "Een open picklist met deze ID kon niet gevonden worden!",
                 "OK"
             );
 
             return;
         }
 
-        await Shell.Current.GoToAsync(nameof(PicklistDetailPage), new Dictionary<string, object>
-        {
-            { nameof(Picklist), picklist }
-        });
+        await Shell.Current.GoToAsync(
+            $"{nameof(PicklistListPage)}/{nameof(PicklistDetailPage)}",
+            new Dictionary<string, object>
+            {
+                { nameof(Picklist), picklist }
+            }
+        );
     }
 
     private async Task LoadMorePicklists()
     {
         List<Picklist> newPicklists = await _picklistService.GetPicklists(nextPageToLoad);
-        
+
         newPicklists.ForEach(p => Picklists.Add(p));
-        
+
         nextPageToLoad++;
     }
 }
