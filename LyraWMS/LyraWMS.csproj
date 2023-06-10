@@ -42,7 +42,7 @@
 	  <CreatePackage>false</CreatePackage>
 	  <CodesignKey>Apple Development: guus@guus.tech (NR7P94BT9B)</CodesignKey>
 	  <MtouchInterpreter>-all</MtouchInterpreter>
-	  <CodesignProvision>Automatic</CodesignProvision>
+	  <CodesignProvision>iOS Team Provisioning Profile: tech.guus.LyraWMS</CodesignProvision>
 	  <MtouchLink>SdkOnly</MtouchLink>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>

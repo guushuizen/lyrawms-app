@@ -6,6 +6,7 @@ using LyraWMS.Models;
 using LyraWMS.Models.ObservableModels;
 using LyraWMS.Services;
 using LyraWMS.Views;
+using PropertyChangingEventArgs = System.ComponentModel.PropertyChangingEventArgs;
 
 namespace LyraWMS.ViewModels.Picklists;
 
@@ -16,17 +17,14 @@ public class DetailViewModel : BaseViewModel
     public ObservablePicklist FullPicklist
     {
         get => _fullPicklist;
-        set => SetProperty(ref _fullPicklist, value);
+        private set => SetProperty(ref _fullPicklist, value);
     }
     
     private Picklist _picklist;
     public Picklist Picklist
     {
         get => _picklist;
-        set {
-            SetProperty(ref _picklist, value);
-            Task.Run(Initialize);
-        }
+        set => SetProperty(ref _picklist, value);
     }
     
     private readonly PicklistService _picklistService;
@@ -55,6 +53,8 @@ public class DetailViewModel : BaseViewModel
         DecreasePickedProductQuantityCommand = new Command(sku => DecreasePickedProductQuantity((string) sku));
         IncreasePickedProductQuantityCommand = new Command(sku => IncreasePickedProductQuantity((string) sku));
         CompletePicklistCommand = new AsyncRelayCommand(async () => await CompletePicklist());
+
+        PropertyChanged += Initialize;
     }
 
     private void DeterminePicklistReadiness()
@@ -62,11 +62,14 @@ public class DetailViewModel : BaseViewModel
         IsPicklistReady = FullPicklist.Products.All(p => p.PickedQuantity == p.PickableQuantity);
     }
 
-    private async Task Initialize()
+    private async void Initialize(object? sender, PropertyChangedEventArgs args)
     {
-        FullPicklist = new ObservablePicklist(await _picklistService.GetFullPicklist(Picklist.Uuid));
-        
-        Loading = false;
+        if (args.PropertyName == nameof(Picklist) && Picklist.Reference != FullPicklist?.Reference)
+        {
+            FullPicklist = new ObservablePicklist(await _picklistService.GetFullPicklist(Picklist.Uuid));
+
+            Loading = false;
+        }
     }
 
     private async Task OpenBarcodePopup()

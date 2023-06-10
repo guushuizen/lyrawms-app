@@ -20,7 +20,6 @@ public class ListViewModel : BaseViewModel
     }
 
     public ICommand OpenBarcodePopupCommand { get; set; }
-    
     public ICommand GoToPicklistCommand { get; set; }
     
     public ListViewModel(PicklistService picklistService)
