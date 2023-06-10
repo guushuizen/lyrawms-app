@@ -5,8 +5,8 @@
              xmlns:models="clr-namespace:LyraWMS.Models"
              xmlns:picklistsVm="clr-namespace:LyraWMS.ViewModels.Picklists"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="LyraWMS.Views.Picklists.ListPage"
-             x:DataType="picklistsVm:ListViewModel"
+             x:Class="LyraWMS.Views.Picklists.PicklistListPage"
+             x:DataType="picklistsVm:PicklistListViewModel"
              Title="Picklists">
 
     <ContentPage.ToolbarItems>
@@ -27,7 +27,6 @@
 
     <CollectionView
         ItemsSource="{Binding Picklists}"
-        IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
         Margin="0,10,0,0"
         SelectionMode="Single"
         SelectionChangedCommand="{Binding GoToPicklistCommand}"
@@ -120,6 +119,7 @@
 
         <CollectionView.Footer>
             <Button
+                IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
                 BackgroundColor="{StaticResource Primary}"
                 Text="Laad meer"
                 Margin="10"

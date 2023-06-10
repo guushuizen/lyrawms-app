@@ -20,14 +20,14 @@
         <Tab Title="Picklists" Icon="picklists.png">
             <ShellContent
                 Title="Picklists"
-                ContentTemplate="{DataTemplate picklistsViews:ListPage}"
+                ContentTemplate="{DataTemplate picklistsViews:PicklistListPage}"
                 Route="PicklistsListPage" />
         </Tab>
         
         <Tab Title="Producten" Icon="products.png">
             <ShellContent
                 Title="Producten"
-                ContentTemplate="{DataTemplate productsViews:ListPage}"
+                ContentTemplate="{DataTemplate productsViews:ProductListPage}"
                 Route="ProductsListPage" />
         </Tab>
     </TabBar>

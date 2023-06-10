@@ -9,8 +9,20 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 		
-		Routing.RegisterRoute(nameof(PicklistDetailPage), typeof(PicklistDetailPage));
-		Routing.RegisterRoute(nameof(ProductDetailPage), typeof(ProductDetailPage));
+		Routing.RegisterRoute(
+			$"{nameof(PicklistListPage)}/{nameof(PicklistDetailPage)}",
+			typeof(PicklistDetailPage)
+		);
+		
+		Routing.RegisterRoute(
+			$"{nameof(ProductListPage)}/{nameof(ProductDetailPage)}", 
+			typeof(ProductDetailPage)
+		);
+		
+		Routing.RegisterRoute(
+			$"{nameof(ProductListPage)}/{nameof(ProductDetailPage)}/{nameof(TransferStockPage)}",
+			typeof(TransferStockPage)
+		);
 	}
 }
 

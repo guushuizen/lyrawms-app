@@ -99,7 +99,7 @@
 		<MauiXaml Update="Views\LoadingPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Products\ListPage.xaml">
+		<MauiXaml Update="Views\Products\ProductListPage.xaml">
 		  <SubType>Designer</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Products\ProductDetailPage.xaml">
@@ -119,7 +119,7 @@
 			<DependentUpon>LoadingPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
-		<Compile Update="Views\Products\ListPage.xaml.cs">
+		<Compile Update="Views\Products\ProductListPage.xaml.cs">
 		  <DependentUpon>ListPage.xaml</DependentUpon>
 		  <SubType>Code</SubType>
 		</Compile>
@@ -139,10 +139,6 @@
 		  <DependentUpon>LoginShell.xaml</DependentUpon>
 		  <SubType>Code</SubType>
 		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="Views\Products\ListPage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>

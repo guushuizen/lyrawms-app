@@ -6,7 +6,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:LyraWMS.Models.ObservableModels"
              x:Class="LyraWMS.Views.Picklists.PicklistDetailPage"
-             x:DataType="vm:DetailViewModel"
+             x:DataType="vm:PicklistDetailViewModel"
              Title="{Binding FullPicklist.Reference, StringFormat='Picklist {0}'}">
 
     <ContentPage.Resources>
@@ -138,7 +138,7 @@
                                         <Button
                                             Margin="0,0,10,0"
                                             HorizontalOptions="Center"
-                                            Command="{Binding Path=DecreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            Command="{Binding Path=DecreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:PicklistDetailViewModel}}}"
                                             CommandParameter="{Binding Sku}" 
                                             Text="-"
                                             Padding="1"
@@ -158,7 +158,7 @@
                                         <Button
                                             Margin="10,0,0,0"
                                             HorizontalOptions="Center"
-                                            Command="{Binding Path=IncreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:DetailViewModel}}}"
+                                            Command="{Binding Path=IncreasePickedProductQuantityCommand, Source={RelativeSource AncestorType={x:Type vm:PicklistDetailViewModel}}}"
                                             CommandParameter="{Binding Sku}" 
                                             Text="+"
                                             Padding="1"

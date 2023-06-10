@@ -6,7 +6,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:LyraWMS.Models"
              x:Class="LyraWMS.Views.Products.ProductDetailPage"
-             x:DataType="vm:DetailViewModel"
+             x:DataType="vm:ProductDetailViewModel"
              Title="{Binding Product.Name}">
 
     <ContentPage.Resources>
@@ -14,139 +14,144 @@
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout>
-                <ActivityIndicator
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    IsRunning="True"
-                    HeightRequest="100"
-                    WidthRequest="100"
-                    IsVisible="{Binding Loading}" />
+        <VerticalStackLayout
+            VerticalOptions="Fill"
+            HorizontalOptions="Center">
+            
+            <ActivityIndicator
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                IsRunning="True"
+                HeightRequest="100"
+                WidthRequest="100"
+                IsVisible="{Binding Loading}" />
+
+            <VerticalStackLayout
+                IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
+                Padding="10,5,10,0">
+                <Label
+                    Text="Details"
+                    FontSize="24"
+                    FontFamily="OpenSansBold" />
+
+                <Grid RowSpacing="5" Padding="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Voorraad"
+                            FontFamily="OpenSansBold" />
+                        <Label
+                            Text="{Binding Product.TotalStock}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                        <Label
+                            Text="SKU"
+                            FontFamily="OpenSansBold" />
+                        <Label
+                            Text="{Binding Product.Sku}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="0" Grid.Row="1">
+                        <Label
+                            Text="Type"
+                            FontFamily="OpenSansBold" />
+
+                        <Label
+                            Text="{Binding Product.Type, Converter={toolkit:TextCaseConverter Type=FirstUpperRestLower}}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Grid.Row="1">
+                        <Label
+                            Text="Fulfilmentklant"
+                            FontFamily="OpenSansBold" />
+
+                        <Label Text="{Binding Product.FulfilmentClientName}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <BoxView
+                    Margin="0,10,0,10"
+                    HeightRequest="1"
+                    Color="{StaticResource Gray100}" />
+
+                <Label
+                    Text="Voorraadlocaties"
+                    FontFamily="OpenSansBold"
+                    FontSize="24"
+                    Margin="0,10,0,0" />
+
+                <ListView
+                    ItemsSource="{Binding Product.ProductLocations}"
+                    SelectionMode="None"
+                    HasUnevenRows="True"
+                    Margin="0,10,0,0">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ProductLocation">
+                            <Border
+                                Stroke="{StaticResource Gray100}"
+                                StrokeThickness="2"
+                                Padding="2,0">
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5,5,5,5" />
+                                </Border.StrokeShape>
+
+                                <Grid
+                                    Padding="4"
+                                    HorizontalOptions="Fill">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        Text="{Binding Location.Name}"
+                                        FontFamily="OpenSansBold"
+                                        FontSize="18" />
+
+                                    <Label
+                                        HorizontalOptions="End"
+                                        Grid.Column="1"
+                                        FontSize="14"
+                                        Text="{Binding Stock, StringFormat='{0}x'}" />
+                                </Grid>
+                            </Border>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 
-                <VerticalStackLayout
-                    IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
-                    Padding="10,5,10,0">
+                <Button
+                    Margin="0,20,0,0"
+                    Text="Voorraad verplaatsen"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    HorizontalOptions="Fill"
+                    Command=""
+                >
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior 
+                            EventName="Clicked"
+                            Command="{Binding CompletePicklistCommand}" />
+                    </Button.Behaviors>
+                </Button>
 
-                    <Label
-                        Text="Details"
-                        FontSize="24"
-                        FontFamily="OpenSansBold" />
-                    
-                    <Grid RowSpacing="5" Padding="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        
-                        <VerticalStackLayout>
-                            <Label 
-                                Text="Voorraad"
-                                FontFamily="OpenSansBold"/>
-                            <Label
-                                Text="{Binding Product.TotalStock}" />
-                        </VerticalStackLayout>
-                        
-                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                            <Label 
-                                Text="SKU"
-                                FontFamily="OpenSansBold"/>
-                            <Label
-                                Text="{Binding Product.Sku}" />
-                        </VerticalStackLayout>
-                        
-                        <VerticalStackLayout Grid.Column="0" Grid.Row="1">
-                            <Label 
-                                Text="Type"
-                                FontFamily="OpenSansBold"/>
-                            
-                            <Label Text="{Binding Product.Type, Converter={toolkit:TextCaseConverter Type=FirstUpperRestLower}}" />
-                        </VerticalStackLayout>
-                        
-                        <VerticalStackLayout Grid.Column="1" Grid.Row="1">
-                            <Label 
-                                Text="Fulfilmentklant"
-                                FontFamily="OpenSansBold"/>
-                            
-                            <Label Text="{Binding Product.FulfilmentClientName}" />
-                        </VerticalStackLayout>
-                    </Grid>
-                    
-                    <BoxView
-                        Margin="0,10,0,10"
-                        HeightRequest="1"
-                        Color="{StaticResource Gray100}" />
-                    
-                    <Label 
-                        Text="Voorraadlocaties"
-                        FontFamily="OpenSansBold"
-                        FontSize="24"
-                        Margin="0,10,0,0" />
-                    
-                    <CollectionView
-                        ItemsSource="{Binding Product.ProductLocations}"
-                        SelectionMode="None"
-                        ItemSizingStrategy="MeasureAllItems"
-                        Margin="0,10,0,0">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical"
-                                ItemSpacing="5" />
-                        </CollectionView.ItemsLayout>
-
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:ProductLocation">
-                                <Border
-                                    Stroke="{StaticResource Gray100}"
-                                    StrokeThickness="2"
-                                    Padding="2,0">
-
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="5,5,5,5"/>
-                                    </Border.StrokeShape>
-
-                                    <Grid
-                                        Padding="4"
-                                        HorizontalOptions="Fill">
-                                        
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        
-                                        <Label
-                                            HorizontalOptions="Start"
-                                            Text="{Binding Location.Name}"
-                                            FontFamily="OpenSansBold"
-                                            FontSize="18"/>
-                                        
-                                        <Label
-                                            HorizontalOptions="End"
-                                            Grid.Column="1"
-                                            FontSize="14"
-                                            Text="{Binding Stock, StringFormat='{0}x'}"
-                                            />
-                                    </Grid>
-                                </Border>
-                                                              
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                        
-                    </CollectionView>
-
-
-                    <Label
-                        Text="Producten"
-                        FontSize="24"
-                        FontFamily="OpenSansBold" />
-                </VerticalStackLayout>
             </VerticalStackLayout>
-        </ScrollView>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

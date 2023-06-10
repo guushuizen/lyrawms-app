@@ -8,7 +8,7 @@ using LyraWMS.Views.Picklists;
 
 namespace LyraWMS.ViewModels.Picklists;
 
-public class ListViewModel : BaseViewModel
+public class PicklistListViewModel : BaseViewModel
 {
 
     private readonly PicklistService _picklistService;
@@ -26,7 +26,7 @@ public class ListViewModel : BaseViewModel
     public ICommand GoToPicklistCommand { get; set; }
     public ICommand LoadMorePicklistsCommand { get; set; }
     
-    public ListViewModel(PicklistService picklistService)
+    public PicklistListViewModel(PicklistService picklistService)
     {
         _picklistService = picklistService;
 

@@ -6,12 +6,11 @@ using LyraWMS.Models;
 using LyraWMS.Models.ObservableModels;
 using LyraWMS.Services;
 using LyraWMS.Views;
-using PropertyChangingEventArgs = System.ComponentModel.PropertyChangingEventArgs;
 
 namespace LyraWMS.ViewModels.Picklists;
 
 [QueryProperty(nameof(Picklist), "Picklist")]
-public class DetailViewModel : BaseViewModel
+public class PicklistDetailViewModel : BaseViewModel
 {
     private ObservablePicklist _fullPicklist;
     public ObservablePicklist FullPicklist
@@ -42,7 +41,7 @@ public class DetailViewModel : BaseViewModel
     
     public ICommand CompletePicklistCommand { get; set; }
 
-    public DetailViewModel(PicklistService picklistService)
+    public PicklistDetailViewModel(PicklistService picklistService)
     {
         Loading = true;
         

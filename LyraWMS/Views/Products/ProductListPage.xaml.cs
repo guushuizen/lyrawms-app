@@ -2,10 +2,10 @@ using LyraWMS.ViewModels.Products;
 
 namespace LyraWMS.Views.Products;
 
-public partial class ListPage : ContentPage
+public partial class ProductListPage : ContentPage
 {
     
-    public ListPage(ListViewModel viewModel)
+    public ProductListPage(ProductListViewModel viewModel)
     {
         InitializeComponent();
 

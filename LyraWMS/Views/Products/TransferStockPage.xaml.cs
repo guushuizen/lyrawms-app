@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LyraWMS.ViewModels.Picklists;
+using LyraWMS.ViewModels.Products;
 
-namespace LyraWMS.Views.Picklists;
+namespace LyraWMS.Views.Products;
 
-public partial class PicklistDetailPage : ContentPage
+public partial class TransferStockPage : ContentPage
 {
-    public PicklistDetailPage(PicklistDetailViewModel viewModel)
+    public TransferStockPage(TransferStockViewModel viewModel)
     {
         InitializeComponent();
-
+        
         BindingContext = viewModel;
     }
 }
