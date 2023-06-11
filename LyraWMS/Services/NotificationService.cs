@@ -10,11 +10,15 @@ public class NotificationService : INotificationService
         return Shell.Current.DisplayAlert(title, body, buttonTitle);
     }
 
-    public Task<bool> DisplayAlert(string title, string body, string acceptTitle, string declineTitle)
+    public Task<bool> DisplayAlert(
+        string title,
+        string body,
+        string acceptTitle,
+        string declineTitle
+    )
     {
         return Shell.Current.DisplayAlert(title, body, acceptTitle, declineTitle);
     }
-
 
     public Task DisplaySnackbar(string body)
     {

@@ -89,7 +89,10 @@ public class TransferStockViewModel : BaseViewModel
     private readonly IProductService _productService;
     private readonly INotificationService _notificationService;
 
-    public TransferStockViewModel(IProductService productService, INotificationService notificationService)
+    public TransferStockViewModel(
+        IProductService productService,
+        INotificationService notificationService
+    )
     {
         _productService = productService;
         _notificationService = notificationService;
@@ -173,15 +176,24 @@ public class TransferStockViewModel : BaseViewModel
             );
             return;
         }
-        
-        if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
+
+        if (
+            await _productService.MoveStock(
+                Product,
+                QuantityToMove,
+                NewLocation,
+                OldProductLocation
+            )
+        )
         {
             await Shell.Current.GoToAsync(
                 "..",
                 new Dictionary<string, object> { { "ShouldRefresh", true } }
             );
 
-            await _notificationService.DisplaySnackbar($"Gelukt! Er {(QuantityToMove == 1 ? "is" : "zijn")} {QuantityToMove} stuks {Product.Name} verplaatst naar {NewLocation.Name}");
+            await _notificationService.DisplaySnackbar(
+                $"Gelukt! Er {(QuantityToMove == 1 ? "is" : "zijn")} {QuantityToMove} stuks {Product.Name} verplaatst naar {NewLocation.Name}"
+            );
         }
         else
         {

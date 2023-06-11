@@ -30,7 +30,7 @@ public class PicklistDetailViewModel : BaseViewModel
     private readonly PicklistService _picklistService;
 
     private readonly INotificationService _notificationService;
-    
+
     private bool _isPicklistReady;
     public bool IsPicklistReady
     {
@@ -43,9 +43,11 @@ public class PicklistDetailViewModel : BaseViewModel
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
 
     public ICommand CompletePicklistCommand { get; set; }
-    
 
-    public PicklistDetailViewModel(PicklistService picklistService, INotificationService notificationService)
+    public PicklistDetailViewModel(
+        PicklistService picklistService,
+        INotificationService notificationService
+    )
     {
         Loading = true;
 
@@ -142,7 +144,9 @@ public class PicklistDetailViewModel : BaseViewModel
         {
             await Shell.Current.GoToAsync("..");
 
-            await _notificationService.DisplaySnackbar($"Picklijst {FullPicklist.Reference} is afgerond!");
+            await _notificationService.DisplaySnackbar(
+                $"Picklijst {FullPicklist.Reference} is afgerond!"
+            );
         }
         else
         {

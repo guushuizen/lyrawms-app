@@ -23,14 +23,17 @@ public class PicklistListViewModel : BaseViewModel
     }
 
     private int nextPageToLoad;
-    
+
     private INotificationService _notificationService;
 
     public ICommand OpenBarcodePopupCommand { get; set; }
     public ICommand GoToPicklistCommand { get; set; }
     public ICommand LoadMorePicklistsCommand { get; set; }
 
-    public PicklistListViewModel(PicklistService picklistService, INotificationService notificationService)
+    public PicklistListViewModel(
+        PicklistService picklistService,
+        INotificationService notificationService
+    )
     {
         _picklistService = picklistService;
         _notificationService = notificationService;

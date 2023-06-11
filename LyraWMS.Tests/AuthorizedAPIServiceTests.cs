@@ -6,13 +6,14 @@ namespace LyraWMS.Tests;
 
 public class AuthorizedAPIServiceTests
 {
-
     private AuthorizedAPIService _apiService = new(new AuthenticationService(new StorageService()));
-    
+
     private string GetFileContents(string resourceFile)
     {
         var asm = Assembly.GetExecutingAssembly();
-        using (var stream = asm.GetManifestResourceStream($"LyraWMS.Tests.Resources.{resourceFile}"))
+        using (
+            var stream = asm.GetManifestResourceStream($"LyraWMS.Tests.Resources.{resourceFile}")
+        )
         {
             if (stream != null)
             {
@@ -22,18 +23,18 @@ public class AuthorizedAPIServiceTests
         }
         return string.Empty;
     }
-    
+
     [Fact]
     public void TestParsePicklistResponse()
     {
         string body = GetFileContents("picklistResponse.json");
         FullPicklist parsed = _apiService.DeserializeJson<FullPicklist>(body, "picklist");
-        
+
         Assert.Equal(parsed.Id, 62);
         Assert.Equal(parsed.Order.Reference, "O2022-00097");
         Assert.Equal(parsed.ShippingAddress.Fullname, "ir. Nadine van Maasgouw");
     }
-    
+
     [Fact]
     public void TestParsePicklistListResponse()
     {
@@ -48,12 +49,11 @@ public class AuthorizedAPIServiceTests
     public void TestProductListResponseParsing()
     {
         string body = GetFileContents("productListResponse.json");
-        List<Product> parsedProducts =
-            _apiService.DeserializeJson<List<Product>>(body, "rows");
-        
+        List<Product> parsedProducts = _apiService.DeserializeJson<List<Product>>(body, "rows");
+
         Assert.Null(parsedProducts[0].FulfilmentClientName);
         Assert.Equal("Smederij Recers CV", parsedProducts[3].FulfilmentClientName);
-        
+
         Assert.Equal(2033, parsedProducts[0].ProductLocations[0].Stock);
         Assert.Equal(2033, parsedProducts[0].TotalStock);
     }

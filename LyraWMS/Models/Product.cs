@@ -12,7 +12,7 @@ public class Product
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
     public int TotalStock { get; set; }
     public string Type { get; set; }
-    
+
     [JsonPropertyName("fulfilmentclient.name")]
     public string FulfilmentClientName { get; set; }
     public Pivot? Pivot { get; set; }

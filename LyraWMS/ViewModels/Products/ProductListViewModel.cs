@@ -27,7 +27,10 @@ public class ProductListViewModel : BaseViewModel
 
     public ICommand LoadMoreProductsCommand { get; set; }
 
-    public ProductListViewModel(IProductService productService, INotificationService notificationService)
+    public ProductListViewModel(
+        IProductService productService,
+        INotificationService notificationService
+    )
     {
         _productService = productService;
         _notificationService = notificationService;
