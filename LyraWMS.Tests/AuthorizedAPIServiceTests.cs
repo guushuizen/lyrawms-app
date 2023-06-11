@@ -2,7 +2,7 @@ using System.Reflection;
 using LyraWMS.Models;
 using LyraWMS.Services;
 
-namespace Tests;
+namespace LyraWMS.Tests;
 
 public class AuthorizedAPIServiceTests
 {

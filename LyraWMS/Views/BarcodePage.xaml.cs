@@ -15,9 +15,7 @@ public partial class BarcodePage : ContentPage
 
 #if IOS
         Task.Run(BarcodeScanner.Mobile.Methods.AskForRequiredPermission);
-        BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(
-            BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128
-        );
+        BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.All);
 
         var cameraView = new CameraView
         {
