@@ -109,6 +109,14 @@ public class PicklistDetailViewModel : BaseViewModel
             FullPicklist.Products.First(p => p.Sku == barcode).PickedQuantity++;
             DeterminePicklistReadiness();
         }
+        else
+        {
+            _notificationService.DisplayAlert(
+                "Oops",
+                "Deze SKU kon niet gevonden worden op deze picklijst. Heb je het juiste product gepakt?",
+                "OK"
+            );
+        }
     }
 
     private async Task OnBarcodeScanned(string sku)
