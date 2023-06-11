@@ -126,7 +126,7 @@
                                                 Text="{Binding Location.Name}"
                                                 FontFamily="OpenSansBold"
                                                 FontSize="18" />
-
+                                            
                                             <Label
                                                 HorizontalOptions="End"
                                                 Grid.Column="1"

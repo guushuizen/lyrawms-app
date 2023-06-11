@@ -16,5 +16,4 @@ public class FullPicklist
     public List<Product> Products { get; set; }
     public Order Order { get; set; }
     public ShippingAddress ShippingAddress { get; set; }
-    public BillingAddress BillingAddress { get; set; }
 }

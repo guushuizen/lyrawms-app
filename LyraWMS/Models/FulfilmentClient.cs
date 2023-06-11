@@ -12,7 +12,4 @@ public class FulfilmentClient
 
     [JsonPropertyName("uuid")]
     public string Uuid { get; set; }
-
-    [JsonPropertyName("profile_photo_url")]
-    public string ProfilePhotoUrl { get; set; }
 }

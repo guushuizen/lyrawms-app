@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Alerts;
 using LyraWMS.Models;
 using LyraWMS.Services;
 using LyraWMS.Views.Products;
@@ -160,13 +161,25 @@ public class TransferStockViewModel : BaseViewModel
             return;
         }
 
-        //if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
+        if (QuantityToMove > OldProductLocation.Stock)
+        {
+            await Shell.Current.DisplayAlert(
+                "Oops",
+                $"Er {(OldProductLocation.Stock == 1 ? "ligt" : "liggen")} slechts {OldProductLocation.Stock} stuks {Product.Name} op de oude locatie {OldProductLocation.Location.Name}, je kan dus niet meer verplaatsen dan dit.",
+                "OK"
+            );
+            return;
+        }
+        
+        // if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
         if (true)
         {
             await Shell.Current.GoToAsync(
                 "..",
                 new Dictionary<string, object> { { "ShouldRefresh", true } }
             );
+
+            await Shell.Current.DisplaySnackbar($"Gelukt! Er {(QuantityToMove == 1 ? "is" : "zijn")} {QuantityToMove} stuks {Product.Name} verplaatst naar {NewLocation.Name}");
         }
         else
         {
