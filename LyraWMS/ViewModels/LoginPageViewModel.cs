@@ -1,14 +1,12 @@
-using System.ComponentModel;
 using System.Windows.Input;
 using LyraWMS.Models;
-using LyraWMS.Services;
-using LyraWMS.Views;
+using LyraWMS.Services.Interfaces;
 
 namespace LyraWMS.ViewModels;
 
 public class LoginPageViewModel : BaseViewModel
 {
-    private readonly AuthenticationService _authenticationService;
+    private readonly IAuthenticationService _authenticationService;
 
     private string _subdomain;
 
@@ -36,7 +34,7 @@ public class LoginPageViewModel : BaseViewModel
 
     public ICommand LoginCommand { get; set; }
 
-    public LoginPageViewModel(AuthenticationService authenticationService)
+    public LoginPageViewModel(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
 

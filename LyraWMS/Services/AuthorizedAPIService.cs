@@ -5,16 +5,17 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using JorgeSerrano.Json;
 using LyraWMS.Models;
+using LyraWMS.Services.Interfaces;
 
 namespace LyraWMS.Services;
 
 public class AuthorizedAPIService
 {
-    private readonly AuthenticationService _authenticationService;
+    private readonly IAuthenticationService _authenticationService;
 
     private HttpClient _httpClient;
 
-    public AuthorizedAPIService(AuthenticationService authenticationService)
+    public AuthorizedAPIService(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
     }
@@ -38,7 +39,7 @@ public class AuthorizedAPIService
 
         HttpResponseMessage response = await _httpClient.GetAsync(uri);
 
-        await AssertAuthSuccess(response);
+        AssertAuthSuccess(response);
 
         return response;
     }
@@ -52,7 +53,7 @@ public class AuthorizedAPIService
 
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(uri, jsonContent);
 
-        await AssertAuthSuccess(response);
+        AssertAuthSuccess(response);
 
         return response;
     }
@@ -66,7 +67,7 @@ public class AuthorizedAPIService
 
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync(uri, jsonContent);
 
-        await AssertAuthSuccess(response);
+        AssertAuthSuccess(response);
 
         return response;
     }
@@ -90,11 +91,11 @@ public class AuthorizedAPIService
         );
     }
 
-    private async Task AssertAuthSuccess(HttpResponseMessage response)
+    private void AssertAuthSuccess(HttpResponseMessage response)
     {
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            await _authenticationService.Logout();
+            _authenticationService.Logout();
         }
     }
 }

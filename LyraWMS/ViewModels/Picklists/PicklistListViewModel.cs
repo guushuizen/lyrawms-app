@@ -3,6 +3,7 @@ using System.Windows.Input;
 using CommunityToolkit.Maui.Views;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views;
 using LyraWMS.Views.Picklists;
 using LyraWMS.Views.Products;
@@ -22,14 +23,17 @@ public class PicklistListViewModel : BaseViewModel
     }
 
     private int nextPageToLoad;
+    
+    private INotificationService _notificationService;
 
     public ICommand OpenBarcodePopupCommand { get; set; }
     public ICommand GoToPicklistCommand { get; set; }
     public ICommand LoadMorePicklistsCommand { get; set; }
 
-    public PicklistListViewModel(PicklistService picklistService)
+    public PicklistListViewModel(PicklistService picklistService, INotificationService notificationService)
     {
         _picklistService = picklistService;
+        _notificationService = notificationService;
 
         Task.Run(Initialize);
 
@@ -74,7 +78,7 @@ public class PicklistListViewModel : BaseViewModel
 
         if (picklist == null)
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Niet gevonden",
                 "Een open picklist met deze ID kon niet gevonden worden!",
                 "OK"

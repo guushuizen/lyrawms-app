@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using LyraWMS.Models;
 using LyraWMS.Models.ObservableModels;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views;
 
 namespace LyraWMS.ViewModels.Picklists;
@@ -28,6 +29,8 @@ public class PicklistDetailViewModel : BaseViewModel
 
     private readonly PicklistService _picklistService;
 
+    private readonly INotificationService _notificationService;
+    
     private bool _isPicklistReady;
     public bool IsPicklistReady
     {
@@ -40,12 +43,14 @@ public class PicklistDetailViewModel : BaseViewModel
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
 
     public ICommand CompletePicklistCommand { get; set; }
+    
 
-    public PicklistDetailViewModel(PicklistService picklistService)
+    public PicklistDetailViewModel(PicklistService picklistService, INotificationService notificationService)
     {
         Loading = true;
 
         _picklistService = picklistService;
+        _notificationService = notificationService;
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
@@ -115,7 +120,7 @@ public class PicklistDetailViewModel : BaseViewModel
 
     private async Task CompletePicklist()
     {
-        var result = await Shell.Current.DisplayAlert(
+        var result = await _notificationService.DisplayAlert(
             "Weet je het zeker?",
             "Je staat op het punt deze picklijst af te ronden.",
             "Ja",
@@ -129,11 +134,11 @@ public class PicklistDetailViewModel : BaseViewModel
         {
             await Shell.Current.GoToAsync("..");
 
-            await Shell.Current.DisplaySnackbar($"Picklijst {FullPicklist.Reference} is afgerond!");
+            await _notificationService.DisplaySnackbar($"Picklijst {FullPicklist.Reference} is afgerond!");
         }
         else
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Oops",
                 "Er is iets fout gegaan tijdens het afronden van de picklijst. Probeer het later nogmaals of neem anders contact op met LyraWMS",
                 "OK"

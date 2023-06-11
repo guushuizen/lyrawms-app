@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views.Products;
 
 namespace LyraWMS.ViewModels.Products;
@@ -36,9 +37,9 @@ public class ProductDetailViewModel : BaseViewModel
 
     public ICommand GoToTransferStockPageCommand { get; set; }
 
-    private ProductService _productService;
+    private IProductService _productService;
 
-    public ProductDetailViewModel(ProductService productService)
+    public ProductDetailViewModel(IProductService productService)
     {
         Loading = true;
 

@@ -3,6 +3,7 @@ using System.Windows.Input;
 using CommunityToolkit.Maui.Alerts;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views.Products;
 using Location = LyraWMS.Models.Location;
 
@@ -85,11 +86,13 @@ public class TransferStockViewModel : BaseViewModel
 
     public ICommand MoveStockCommand { get; set; }
 
-    private ProductService _productService;
+    private readonly IProductService _productService;
+    private readonly INotificationService _notificationService;
 
-    public TransferStockViewModel(ProductService productService)
+    public TransferStockViewModel(IProductService productService, INotificationService notificationService)
     {
         _productService = productService;
+        _notificationService = notificationService;
 
         AvailableWarehouses = new ObservableCollection<Warehouse>();
         AvailableLocations = new ObservableCollection<Location>();
@@ -143,7 +146,7 @@ public class TransferStockViewModel : BaseViewModel
     {
         if (QuantityToMove == 0)
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Oops",
                 "Er moet een te verplaatsen hoeveelheid ingevuld zijn! Deze kan niet 0 zijn.",
                 "OK"
@@ -153,7 +156,7 @@ public class TransferStockViewModel : BaseViewModel
 
         if (OldProductLocation == null)
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Oops",
                 "Er is nog geen oude locatie ingevuld waar de voorraad vandaan verplaatst moet worden.",
                 "OK"
@@ -163,7 +166,7 @@ public class TransferStockViewModel : BaseViewModel
 
         if (QuantityToMove > OldProductLocation.Stock)
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Oops",
                 $"Er {(OldProductLocation.Stock == 1 ? "ligt" : "liggen")} slechts {OldProductLocation.Stock} stuks {Product.Name} op de oude locatie {OldProductLocation.Location.Name}, je kan dus niet meer verplaatsen dan dit.",
                 "OK"
@@ -171,19 +174,18 @@ public class TransferStockViewModel : BaseViewModel
             return;
         }
         
-        // if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
-        if (true)
+        if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
         {
             await Shell.Current.GoToAsync(
                 "..",
                 new Dictionary<string, object> { { "ShouldRefresh", true } }
             );
 
-            await Shell.Current.DisplaySnackbar($"Gelukt! Er {(QuantityToMove == 1 ? "is" : "zijn")} {QuantityToMove} stuks {Product.Name} verplaatst naar {NewLocation.Name}");
+            await _notificationService.DisplaySnackbar($"Gelukt! Er {(QuantityToMove == 1 ? "is" : "zijn")} {QuantityToMove} stuks {Product.Name} verplaatst naar {NewLocation.Name}");
         }
         else
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Oops",
                 "Er is iets niet goed gegaan! Probeer het later nog eens,",
                 "OK"

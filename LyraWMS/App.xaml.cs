@@ -1,11 +1,12 @@
 ﻿using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views;
 
 namespace LyraWMS;
 
 public partial class App : Application
 {
-    public App(AuthenticationService authenticationService, IServiceProvider serviceProvider)
+    public App(IAuthenticationService authenticationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
 

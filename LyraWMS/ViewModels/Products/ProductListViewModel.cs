@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views;
 using LyraWMS.Views.Products;
 
@@ -9,7 +10,8 @@ namespace LyraWMS.ViewModels.Products;
 
 public class ProductListViewModel : BaseViewModel
 {
-    private readonly ProductService _productService;
+    private readonly IProductService _productService;
+    private readonly INotificationService _notificationService;
 
     private ObservableCollection<Product> _products;
     public ObservableCollection<Product> Products
@@ -25,9 +27,10 @@ public class ProductListViewModel : BaseViewModel
 
     public ICommand LoadMoreProductsCommand { get; set; }
 
-    public ProductListViewModel(ProductService productService)
+    public ProductListViewModel(IProductService productService, INotificationService notificationService)
     {
         _productService = productService;
+        _notificationService = notificationService;
 
         Loading = true;
 
@@ -70,7 +73,7 @@ public class ProductListViewModel : BaseViewModel
 
         if (product == null)
         {
-            await Shell.Current.DisplayAlert(
+            await _notificationService.DisplayAlert(
                 "Niet gevonden",
                 "Een product met deze ID kon niet gevonden worden!",
                 "OK"

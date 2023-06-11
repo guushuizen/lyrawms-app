@@ -2,6 +2,7 @@ using System.Text.Json.Nodes;
 using System.Windows.Input;
 using LyraWMS.Models;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.Views;
 
 namespace LyraWMS.ViewModels;
@@ -10,7 +11,7 @@ public class DashboardViewModel : BaseViewModel
 {
     private readonly AuthorizedAPIService _apiService;
 
-    private readonly AuthenticationService _authenticationService;
+    private readonly IAuthenticationService _authenticationService;
 
     private User _user;
     public User User
@@ -30,7 +31,7 @@ public class DashboardViewModel : BaseViewModel
 
     public DashboardViewModel(
         AuthorizedAPIService apiService,
-        AuthenticationService authenticationService
+        IAuthenticationService authenticationService
     )
     {
         _apiService = apiService;
@@ -74,7 +75,7 @@ public class DashboardViewModel : BaseViewModel
 
     private async Task Logout()
     {
-        await _authenticationService.Logout();
+        _authenticationService.Logout();
 
         Application.Current.MainPage = new LoginShell();
     }

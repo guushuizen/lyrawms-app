@@ -2,13 +2,20 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using LyraWMS.Models;
-using LyraWMS.Views;
+using LyraWMS.Services.Interfaces;
 
 namespace LyraWMS.Services;
 
-public class AuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
     private User? _user;
+
+    private readonly IStorageService _storageService;
+
+    public AuthenticationService(IStorageService storageService)
+    {
+        _storageService = storageService;
+    }
 
     public async Task<User?> GetCurrentUser()
     {
@@ -64,7 +71,7 @@ public class AuthenticationService
         }
         catch
         {
-            SecureStorage.RemoveAll();
+            _storageService.RemoveAll();
         }
 
         return null;
@@ -72,18 +79,18 @@ public class AuthenticationService
 
     private async Task StoreCredentials(string subdomain, string apiToken)
     {
-        await SecureStorage.SetAsync("subdomain", subdomain);
-        await SecureStorage.SetAsync("apiToken", apiToken);
+        await _storageService.SetAsync("subdomain", subdomain);
+        await _storageService.SetAsync("apiToken", apiToken);
     }
 
     public async Task<Tuple<string, string>?> GetCredentials()
     {
-        var subdomain = await SecureStorage.GetAsync("subdomain");
-        var apiToken = await SecureStorage.GetAsync("apiToken");
+        var subdomain = await _storageService.GetAsync("subdomain");
+        var apiToken = await _storageService.GetAsync("apiToken");
 
         if (string.IsNullOrEmpty(subdomain) || string.IsNullOrEmpty(apiToken))
         {
-            SecureStorage.RemoveAll();
+            _storageService.RemoveAll();
 
             return null;
         }
@@ -91,9 +98,9 @@ public class AuthenticationService
         return new Tuple<string, string>(subdomain, apiToken);
     }
 
-    public async Task Logout()
+    public void Logout()
     {
-        SecureStorage.RemoveAll();
+        _storageService.RemoveAll();
 
         _user = null;
     }

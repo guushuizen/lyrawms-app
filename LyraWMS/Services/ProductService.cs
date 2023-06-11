@@ -2,13 +2,14 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using LyraWMS.Models;
+using LyraWMS.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Location = LyraWMS.Models.Location;
 
 namespace LyraWMS.Services;
 
-public class ProductService
+public class ProductService : IProductService
 {
     private readonly AuthorizedAPIService _apiService;
 

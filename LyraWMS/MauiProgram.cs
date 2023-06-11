@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using BarcodeScanner.Mobile;
 using CommunityToolkit.Maui.Markup;
 using LyraWMS.Services;
+using LyraWMS.Services.Interfaces;
 using LyraWMS.ViewModels;
 using LyraWMS.ViewModels.Picklists;
 using LyraWMS.ViewModels.Products;
@@ -54,9 +55,11 @@ public static class MauiProgram
         builder.Services.AddTransient<TransferStockViewModel>();
 
         builder.Services.AddSingleton<AuthorizedAPIService>();
-        builder.Services.AddSingleton<AuthenticationService>();
+        builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
         builder.Services.AddSingleton<PicklistService>();
-        builder.Services.AddSingleton<ProductService>();
+        builder.Services.AddSingleton<IProductService, ProductService>();
+        builder.Services.AddSingleton<IStorageService, StorageService>();
+        builder.Services.AddSingleton<INotificationService, NotificationService>();
 
 #if DEBUG
         builder.Logging.AddDebug();
