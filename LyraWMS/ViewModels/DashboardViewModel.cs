@@ -6,24 +6,32 @@ using LyraWMS.Views;
 
 namespace LyraWMS.ViewModels;
 
-public class DashboardViewModel : BaseViewModel 
+public class DashboardViewModel : BaseViewModel
 {
-
     private readonly AuthorizedAPIService _apiService;
 
     private readonly AuthenticationService _authenticationService;
 
     private User _user;
-    public User User { get => _user; set => SetProperty(ref _user, value); }
+    public User User
+    {
+        get => _user;
+        set => SetProperty(ref _user, value);
+    }
 
     private DashboardStatistics _statistics;
-    public DashboardStatistics Statistics { get => _statistics; set => SetProperty(ref _statistics, value); }
+    public DashboardStatistics Statistics
+    {
+        get => _statistics;
+        set => SetProperty(ref _statistics, value);
+    }
 
     public ICommand LogoutCommand { get; set; }
 
     public DashboardViewModel(
         AuthorizedAPIService apiService,
-        AuthenticationService authenticationService)
+        AuthenticationService authenticationService
+    )
     {
         _apiService = apiService;
         _authenticationService = authenticationService;
@@ -67,7 +75,7 @@ public class DashboardViewModel : BaseViewModel
     private async Task Logout()
     {
         await _authenticationService.Logout();
-        
+
         Application.Current.MainPage = new LoginShell();
     }
 }

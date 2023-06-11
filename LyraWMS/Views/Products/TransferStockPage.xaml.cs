@@ -12,7 +12,7 @@ public partial class TransferStockPage : ContentPage
     public TransferStockPage(TransferStockViewModel viewModel)
     {
         InitializeComponent();
-        
+
         BindingContext = viewModel;
     }
 }

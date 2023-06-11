@@ -34,7 +34,9 @@ public class PicklistListViewModel : BaseViewModel
         Task.Run(Initialize);
 
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
-        GoToPicklistCommand = new Command(async (picklistId) => await GoToPicklist((string)picklistId));
+        GoToPicklistCommand = new Command(
+            async (picklistId) => await GoToPicklist((string)picklistId)
+        );
         LoadMorePicklistsCommand = new Command(async () => await LoadMorePicklists());
     }
 
@@ -42,7 +44,9 @@ public class PicklistListViewModel : BaseViewModel
     {
         Loading = true;
 
-        Picklists = new ObservableCollection<Picklist>(await _picklistService.GetPicklists(nextPageToLoad));
+        Picklists = new ObservableCollection<Picklist>(
+            await _picklistService.GetPicklists(nextPageToLoad)
+        );
         nextPageToLoad++;
 
         Loading = false;
@@ -57,9 +61,9 @@ public class PicklistListViewModel : BaseViewModel
 
     private async Task OpenBarcodePopup()
     {
-        await Shell.Current.Navigation.PushModalAsync(new BarcodePage(
-            new Command(barcode => GoToPicklistCommand.Execute((string)barcode))
-        ));
+        await Shell.Current.Navigation.PushModalAsync(
+            new BarcodePage(new Command(barcode => GoToPicklistCommand.Execute((string)barcode)))
+        );
     }
 
     private async Task GoToPicklist(string picklistId)
@@ -81,10 +85,7 @@ public class PicklistListViewModel : BaseViewModel
 
         await Shell.Current.GoToAsync(
             $"{nameof(PicklistListPage)}/{nameof(PicklistDetailPage)}",
-            new Dictionary<string, object>
-            {
-                { nameof(Picklist), picklist }
-            }
+            new Dictionary<string, object> { { nameof(Picklist), picklist } }
         );
     }
 

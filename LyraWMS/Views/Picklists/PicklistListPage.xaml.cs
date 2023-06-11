@@ -9,8 +9,9 @@ public partial class PicklistListPage : ContentPage
         InitializeComponent();
 
         BindingContext = viewModel;
-        
-        NavigatedTo += (sender, args) => Task.Run(((PicklistListViewModel)BindingContext).Initialize);
+
+        NavigatedTo += (sender, args) =>
+            Task.Run(((PicklistListViewModel)BindingContext).Initialize);
 
         NavigatedFrom += (sender, args) => ((PicklistListViewModel)BindingContext).Clear();
     }

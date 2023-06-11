@@ -1,6 +1,7 @@
-using System; 
-namespace LyraWMS.Models{ 
+using System;
 
+namespace LyraWMS.Models
+{
     public class Order
     {
         public int Id { get; set; }

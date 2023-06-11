@@ -18,14 +18,14 @@ public class PicklistDetailViewModel : BaseViewModel
         get => _fullPicklist;
         private set => SetProperty(ref _fullPicklist, value);
     }
-    
+
     private Picklist _picklist;
     public Picklist Picklist
     {
         get => _picklist;
         set => SetProperty(ref _picklist, value);
     }
-    
+
     private readonly PicklistService _picklistService;
 
     private bool _isPicklistReady;
@@ -38,19 +38,23 @@ public class PicklistDetailViewModel : BaseViewModel
     public ICommand OpenBarcodePopupCommand { get; set; }
     public ICommand DecreasePickedProductQuantityCommand { get; set; }
     public ICommand IncreasePickedProductQuantityCommand { get; set; }
-    
+
     public ICommand CompletePicklistCommand { get; set; }
 
     public PicklistDetailViewModel(PicklistService picklistService)
     {
         Loading = true;
-        
+
         _picklistService = picklistService;
-        
+
         OpenBarcodePopupCommand = new Command(async () => await OpenBarcodePopup());
 
-        DecreasePickedProductQuantityCommand = new Command(sku => DecreasePickedProductQuantity((string) sku));
-        IncreasePickedProductQuantityCommand = new Command(sku => IncreasePickedProductQuantity((string) sku));
+        DecreasePickedProductQuantityCommand = new Command(
+            sku => DecreasePickedProductQuantity((string)sku)
+        );
+        IncreasePickedProductQuantityCommand = new Command(
+            sku => IncreasePickedProductQuantity((string)sku)
+        );
         CompletePicklistCommand = new AsyncRelayCommand(async () => await CompletePicklist());
 
         PropertyChanged += Initialize;
@@ -65,7 +69,9 @@ public class PicklistDetailViewModel : BaseViewModel
     {
         if (args.PropertyName == nameof(Picklist) && Picklist.Reference != FullPicklist?.Reference)
         {
-            FullPicklist = new ObservablePicklist(await _picklistService.GetFullPicklist(Picklist.Uuid));
+            FullPicklist = new ObservablePicklist(
+                await _picklistService.GetFullPicklist(Picklist.Uuid)
+            );
 
             Loading = false;
         }
@@ -73,9 +79,9 @@ public class PicklistDetailViewModel : BaseViewModel
 
     private async Task OpenBarcodePopup()
     {
-        await Application.Current.MainPage.Navigation.PushModalAsync(new BarcodePage(
-            new Command(async (barcode) => await OnBarcodeScanned((string) barcode))
-        ));
+        await Application.Current.MainPage.Navigation.PushModalAsync(
+            new BarcodePage(new Command(async (barcode) => await OnBarcodeScanned((string)barcode)))
+        );
     }
 
     private void DecreasePickedProductQuantity(string barcode)
@@ -99,7 +105,7 @@ public class PicklistDetailViewModel : BaseViewModel
             DeterminePicklistReadiness();
         }
     }
-    
+
     private async Task OnBarcodeScanned(string sku)
     {
         IncreasePickedProductQuantity(sku);
@@ -109,8 +115,12 @@ public class PicklistDetailViewModel : BaseViewModel
 
     private async Task CompletePicklist()
     {
-        var result = await Shell.Current.DisplayAlert("Weet je het zeker?",
-            "Je staat op het punt deze picklijst af te ronden.", "Ja", "Nee");
+        var result = await Shell.Current.DisplayAlert(
+            "Weet je het zeker?",
+            "Je staat op het punt deze picklijst af te ronden.",
+            "Ja",
+            "Nee"
+        );
 
         if (!result)
             return;

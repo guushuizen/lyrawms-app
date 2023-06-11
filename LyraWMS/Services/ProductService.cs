@@ -8,7 +8,7 @@ using Location = LyraWMS.Models.Location;
 
 namespace LyraWMS.Services;
 
-public class ProductService 
+public class ProductService
 {
     private readonly AuthorizedAPIService _apiService;
 
@@ -33,11 +33,14 @@ public class ProductService
     {
         HttpResponseMessage response = await _apiService.GetAsync($"/products?search={sku}");
 
-        var products = _apiService.DeserializeJson<List<Product>>(await response.Content.ReadAsStringAsync(), "rows");
+        var products = _apiService.DeserializeJson<List<Product>>(
+            await response.Content.ReadAsStringAsync(),
+            "rows"
+        );
 
         if (products.Count == 0)
             return null;
-        
+
         return products.First();
     }
 
@@ -46,8 +49,11 @@ public class ProductService
         HttpResponseMessage response = await _apiService.GetAsync(
             $"/warehouse/locations/available-fo-stock-allocation?product={product.Uuid}&warehouse={warehouse.Uuid}"
         );
-        
-        List<Location> locations = _apiService.DeserializeJson<List<Location>>(await response.Content.ReadAsStringAsync(), "locations");
+
+        List<Location> locations = _apiService.DeserializeJson<List<Location>>(
+            await response.Content.ReadAsStringAsync(),
+            "locations"
+        );
 
         return locations;
     }
@@ -56,19 +62,28 @@ public class ProductService
     {
         HttpResponseMessage response = await _apiService.GetAsync("/warehouses");
 
-        return _apiService.DeserializeJson<List<Warehouse>>(await response.Content.ReadAsStringAsync(), "warehouses");
+        return _apiService.DeserializeJson<List<Warehouse>>(
+            await response.Content.ReadAsStringAsync(),
+            "warehouses"
+        );
     }
 
-    public async Task<bool> MoveStock(Product product, int amount, Location newLocation, ProductLocation oldProductLocation)
+    public async Task<bool> MoveStock(
+        Product product,
+        int amount,
+        Location newLocation,
+        ProductLocation oldProductLocation
+    )
     {
         var response = await _apiService.PostAsync(
             $"/stock-move/{oldProductLocation.Id}",
             new Dictionary<string, object>
             {
-                {"to", newLocation.Uuid},
-                {"amount", amount},
-                {"instant", true}
-            });
+                { "to", newLocation.Uuid },
+                { "amount", amount },
+                { "instant", true }
+            }
+        );
 
         return response.IsSuccessStatusCode;
     }

@@ -1,6 +1,7 @@
-using System; 
-namespace LyraWMS.Models{ 
+using System;
 
+namespace LyraWMS.Models
+{
     public class DynamicLocationType
     {
         public int Id { get; set; }
@@ -16,5 +17,4 @@ namespace LyraWMS.Models{
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
-
 }

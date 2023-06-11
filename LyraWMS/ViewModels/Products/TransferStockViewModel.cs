@@ -25,7 +25,7 @@ public class TransferStockViewModel : BaseViewModel
         get => _oldProductLocation;
         set => SetProperty(ref _oldProductLocation, value);
     }
-    
+
     private int _quantityToMove;
 
     public int QuantityToMove
@@ -73,7 +73,7 @@ public class TransferStockViewModel : BaseViewModel
         get => _searchQuery;
         set => SetProperty(ref _searchQuery, value);
     }
-    
+
     private bool _isLoadingLocations;
 
     public bool IsLoadingLocations
@@ -85,7 +85,7 @@ public class TransferStockViewModel : BaseViewModel
     public ICommand MoveStockCommand { get; set; }
 
     private ProductService _productService;
-    
+
     public TransferStockViewModel(ProductService productService)
     {
         _productService = productService;
@@ -97,16 +97,28 @@ public class TransferStockViewModel : BaseViewModel
         IsLoadingLocations = true;
 
         MoveStockCommand = new Command(async () => await MoveStock());
-        
-        PropertyChanged += (sender, args) => { if (args.PropertyName == nameof(Product)) Task.Run(LoadAvailableWarehouses); };
-        PropertyChanged += (sender, args) => { if (args.PropertyName == nameof(SelectedWarehouse)) Task.Run(LoadLocations); };    
-        PropertyChanged += (sender, args) => { if (args.PropertyName == nameof(SearchQuery)) Task.Run(LoadLocations); };    
+
+        PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(Product))
+                Task.Run(LoadAvailableWarehouses);
+        };
+        PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(SelectedWarehouse))
+                Task.Run(LoadLocations);
+        };
+        PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(SearchQuery))
+                Task.Run(LoadLocations);
+        };
     }
 
     private async Task LoadAvailableWarehouses()
     {
         var warehouses = await _productService.GetWarehouses();
-        
+
         MainThread.BeginInvokeOnMainThread(() =>
         {
             warehouses.ForEach(w => AvailableWarehouses.Add(w));
@@ -118,9 +130,10 @@ public class TransferStockViewModel : BaseViewModel
     private async Task LoadLocations()
     {
         IsLoadingLocations = true;
-        
-        (await _productService.GetAvailableLocations(Product, SelectedWarehouse))
-            .ForEach(l => AvailableLocations.Add(l));
+
+        (await _productService.GetAvailableLocations(Product, SelectedWarehouse)).ForEach(
+            l => AvailableLocations.Add(l)
+        );
 
         IsLoadingLocations = false;
     }
@@ -129,7 +142,11 @@ public class TransferStockViewModel : BaseViewModel
     {
         if (QuantityToMove == 0)
         {
-            await Shell.Current.DisplayAlert("Oops", "Er moet een te verplaatsen hoeveelheid ingevuld zijn! Deze kan niet 0 zijn.", "OK");
+            await Shell.Current.DisplayAlert(
+                "Oops",
+                "Er moet een te verplaatsen hoeveelheid ingevuld zijn! Deze kan niet 0 zijn.",
+                "OK"
+            );
             return;
         }
 
@@ -142,18 +159,22 @@ public class TransferStockViewModel : BaseViewModel
             );
             return;
         }
-        
+
         //if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
         if (true)
         {
-            await Shell.Current.GoToAsync("..", new Dictionary<string, object>
-            {
-                {"ShouldRefresh", true}
-            });
+            await Shell.Current.GoToAsync(
+                "..",
+                new Dictionary<string, object> { { "ShouldRefresh", true } }
+            );
         }
         else
         {
-            await Shell.Current.DisplayAlert("Oops", "Er is iets niet goed gegaan! Probeer het later nog eens,", "OK");
+            await Shell.Current.DisplayAlert(
+                "Oops",
+                "Er is iets niet goed gegaan! Probeer het later nog eens,",
+                "OK"
+            );
         }
     }
 }

@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+
 namespace LyraWMS.Models;
 
 public class FullPicklist
@@ -16,5 +17,4 @@ public class FullPicklist
     public Order Order { get; set; }
     public ShippingAddress ShippingAddress { get; set; }
     public BillingAddress BillingAddress { get; set; }
-
 }

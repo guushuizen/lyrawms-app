@@ -39,7 +39,7 @@ public class LoginPageViewModel : BaseViewModel
     public LoginPageViewModel(AuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
-        
+
         LoginCommand = new Command(async () => await AttemptLogin());
     }
 
@@ -49,7 +49,11 @@ public class LoginPageViewModel : BaseViewModel
 
         if (user == null)
         {
-            await Application.Current.MainPage.DisplayAlert("Incorrecte gegevens", "De combinatie van subdomein en API token is niet juist.", "OK");
+            await Application.Current.MainPage.DisplayAlert(
+                "Incorrecte gegevens",
+                "De combinatie van subdomein en API token is niet juist.",
+                "OK"
+            );
         }
         else
         {

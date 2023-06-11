@@ -19,21 +19,28 @@ public class PicklistService
 
     public async Task<List<Picklist>> GetPicklists(int page = 0)
     {
-        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?modifiers[filters][status]=open&page={page}");
+        HttpResponseMessage response = await _apiService.GetAsync(
+            $"/picklists?modifiers[filters][status]=open&page={page}"
+        );
 
         List<Picklist> picklists = _apiService.DeserializeJson<List<Picklist>>(
             await response.Content.ReadAsStringAsync(),
             "rows"
         );
-            
+
         return picklists;
     }
 
     public async Task<Picklist?> FindPicklist(string picklistId)
     {
-        HttpResponseMessage response = await _apiService.GetAsync($"/picklists?search={picklistId}&modifiers[filters][status]=open");
+        HttpResponseMessage response = await _apiService.GetAsync(
+            $"/picklists?search={picklistId}&modifiers[filters][status]=open"
+        );
 
-        var picklists = _apiService.DeserializeJson<List<Picklist>>(await response.Content.ReadAsStringAsync(), "rows");
+        var picklists = _apiService.DeserializeJson<List<Picklist>>(
+            await response.Content.ReadAsStringAsync(),
+            "rows"
+        );
 
         if (picklists.Count == 0)
             return null;
@@ -57,7 +64,9 @@ public class PicklistService
 
     public async Task<bool> CompletePicklist(ObservablePicklist fullPicklist)
     {
-        HttpResponseMessage response = await _apiService.PutAsync($"/picklist/{fullPicklist.Id}/complete-current-stage");
+        HttpResponseMessage response = await _apiService.PutAsync(
+            $"/picklist/{fullPicklist.Id}/complete-current-stage"
+        );
 
         return response.IsSuccessStatusCode;
     }

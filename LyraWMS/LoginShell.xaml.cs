@@ -5,9 +5,8 @@ namespace LyraWMS;
 
 public partial class LoginShell : Shell
 {
-	public LoginShell()
-	{
-		InitializeComponent();
-	}
+    public LoginShell()
+    {
+        InitializeComponent();
+    }
 }
-

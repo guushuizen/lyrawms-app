@@ -8,14 +8,16 @@ namespace LyraWMS.Views;
 public partial class BarcodePage : ContentPage
 {
     private readonly ICommand _onBarcodeScannedCommand;
-    
+
     public BarcodePage(ICommand onBarcodeScannedCommand)
     {
         InitializeComponent();
 
 #if IOS
         Task.Run(BarcodeScanner.Mobile.Methods.AskForRequiredPermission);
-        BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128);
+        BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(
+            BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128
+        );
 
         var cameraView = new CameraView
         {
@@ -25,11 +27,10 @@ public partial class BarcodePage : ContentPage
             VibrationOnDetected = true,
             ScanInterval = 500
         };
-        
+
         cameraView.OnDetected += OnBarcodeDetected;
         View.Content = cameraView;
 #endif
-        
         _onBarcodeScannedCommand = onBarcodeScannedCommand;
     }
 

@@ -13,7 +13,8 @@ public class ProductDetailViewModel : BaseViewModel
     public Product Product
     {
         get => _product;
-        set {
+        set
+        {
             SetProperty(ref _product, value);
             Loading = false;
         }
@@ -50,19 +51,17 @@ public class ProductDetailViewModel : BaseViewModel
     {
         await Shell.Current.GoToAsync(
             $"{nameof(ProductListPage)}/{nameof(ProductDetailPage)}/{nameof(TransferStockPage)}",
-            new Dictionary<string, object>
-            {
-                {nameof(Product), Product}
-            }
+            new Dictionary<string, object> { { nameof(Product), Product } }
         );
     }
 
     public async Task Refresh()
     {
-        if (Product == null) return;
-        
+        if (Product == null)
+            return;
+
         Loading = true;
-        
+
         Product = await _productService.FindProduct(Product.Sku);
 
         Loading = false;

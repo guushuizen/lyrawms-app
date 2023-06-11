@@ -16,7 +16,7 @@ public class Product
     public bool Active { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    
+
     [JsonPropertyName("fulfilmentclient.name")]
     public string FulfilmentClientName { get; set; }
     public Pivot? Pivot { get; set; }

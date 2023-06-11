@@ -1,6 +1,7 @@
-using System; 
-namespace LyraWMS.Models{ 
+using System;
 
+namespace LyraWMS.Models
+{
     public class Location
     {
         public int Id { get; set; }
@@ -29,5 +30,4 @@ namespace LyraWMS.Models{
         public DynamicLocationType DynamicLocationType { get; set; }
         public object StaticLocationType { get; set; }
     }
-
 }

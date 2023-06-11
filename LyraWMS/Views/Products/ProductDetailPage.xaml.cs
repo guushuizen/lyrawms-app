@@ -12,7 +12,7 @@ public partial class ProductDetailPage : ContentPage
 
         // Shell.Current.Navigating += (sender, args) =>
         // {
-        //     if (args.Current.Location.OriginalString.EndsWith(nameof(TransferStockPage)) 
+        //     if (args.Current.Location.OriginalString.EndsWith(nameof(TransferStockPage))
         //         && args.Target.Location.OriginalString.Equals(".."))
         //     {
         //         Task.Run(viewModel.Refresh);

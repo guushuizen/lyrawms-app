@@ -1,5 +1,6 @@
-using System.Collections.Generic; 
-using System; 
+using System.Collections.Generic;
+using System;
+
 namespace LyraWMS.Models;
 
 public class Picklist

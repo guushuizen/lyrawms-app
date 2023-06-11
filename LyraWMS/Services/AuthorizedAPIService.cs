@@ -18,18 +18,15 @@ public class AuthorizedAPIService
     {
         _authenticationService = authenticationService;
     }
-    
+
     private async Task InitializeClient()
     {
-        _httpClient = new HttpClient(new HttpClientHandler
-        {
-            AllowAutoRedirect = false
-        });
+        _httpClient = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
 
         var credentials = await _authenticationService.GetCredentials();
 
         var (subdomain, apiToken) = credentials;
-        
+
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         _httpClient.BaseAddress = new Uri($"https://{subdomain}.wms.nl/");
@@ -46,7 +43,10 @@ public class AuthorizedAPIService
         return response;
     }
 
-    public async Task<HttpResponseMessage> PostAsync(string uri, Dictionary<string, object> jsonContent)
+    public async Task<HttpResponseMessage> PostAsync(
+        string uri,
+        Dictionary<string, object> jsonContent
+    )
     {
         await InitializeClient();
 
@@ -56,8 +56,11 @@ public class AuthorizedAPIService
 
         return response;
     }
-    
-    public async Task<HttpResponseMessage> PutAsync(string uri, Dictionary<string, string> jsonContent = null)
+
+    public async Task<HttpResponseMessage> PutAsync(
+        string uri,
+        Dictionary<string, string> jsonContent = null
+    )
     {
         await InitializeClient();
 
@@ -68,21 +71,23 @@ public class AuthorizedAPIService
         return response;
     }
 
-
     public TValue DeserializeJson<TValue>(string jsonObject, string? rootKey = null)
     {
         string jsonToDeserialize = jsonObject;
         if (rootKey != null)
         {
             JsonNode node = JsonNode.Parse(jsonToDeserialize);
-            jsonToDeserialize = node[rootKey].ToString(); 
+            jsonToDeserialize = node[rootKey].ToString();
         }
-        
-        return JsonSerializer.Deserialize<TValue>(jsonToDeserialize, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
-        });
+
+        return JsonSerializer.Deserialize<TValue>(
+            jsonToDeserialize,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy(),
+            }
+        );
     }
 
     private async Task AssertAuthSuccess(HttpResponseMessage response)

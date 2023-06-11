@@ -30,23 +30,21 @@ public class AuthenticationService
             _user = user;
             return _user;
         }
-        
+
         return null;
     }
-
 
     public async Task<User?> AttemptLogin(string subdomain, string apiToken)
     {
         // We don't recycle this one because we'll use different headers each time
-        HttpClient httpClient = new HttpClient(new HttpClientHandler
-        {
-            AllowAutoRedirect = false,
-        });
-        
+        HttpClient httpClient = new HttpClient(
+            new HttpClientHandler { AllowAutoRedirect = false, }
+        );
+
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
         httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         httpClient.BaseAddress = new Uri($"https://{subdomain}.lyrawms.nl");
-        
+
         try
         {
             HttpResponseMessage responseMessage = await httpClient.GetAsync("/api/v1/confirm");
@@ -54,20 +52,21 @@ public class AuthenticationService
             if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
                 await StoreCredentials(subdomain, apiToken);
-                
+
                 var response = await httpClient.GetAsync("/user/settings");
 
                 var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
 
-                return body["user"].Deserialize<User>(new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                return body["user"].Deserialize<User>(
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
             }
-        } catch {
+        }
+        catch
+        {
             SecureStorage.RemoveAll();
         }
-        
+
         return null;
     }
 

@@ -14,7 +14,8 @@ public partial class App : Application
         if (user != null)
         {
             MainPage = new AppShell();
-        } else
+        }
+        else
         {
             MainPage = new LoginShell();
         }
