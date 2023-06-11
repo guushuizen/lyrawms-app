@@ -1,0 +1,99 @@
+classDiagram
+    class DashboardStatics {
+        +int OrdersCount
+        +int BackordersCount
+        +int ReturnsCount
+        +int PicklistCount
+    }
+    
+    class FulfilmentClient {
+        +int Id
+        +string Uuid
+        +string Name
+    }
+    
+    class FullPicklist {
+        +int Id
+        +string Uuid
+        +string Reference
+        +string Status
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+        +bool Completed
+        +List~Product~ Products
+        +Order Order
+        +ShippingAddress ShippingAddress
+    }
+    
+    class Location {
+        +int Id
+        +int WarehouseId
+        +string Name
+    }
+    
+    class Order {
+        +int Id
+        +string Uuid
+        +string Reference
+        +string Status
+        +DateTime CreatedAt
+        +FulfilmentClient FulfilmentClient
+    }
+    
+    Order --> FulfilmentClient
+    
+    class Picklist {
+        +string Uuid
+        +string Reference
+        +string Status
+        +DateTime CreatedAt
+        +string Customer
+    }
+    
+    note for Pivot "Pivots between a\nPicklist and its Products"
+    
+    class Pivot {
+        +int Id
+        +int PicklistId
+        +int ProductId
+        +int Amount
+        +string Status
+    }
+    
+    class Product {
+        +int Id
+        +string Uuid
+        +string Sku
+        +string Name
+        +int TotalStock
+        +string Type
+        +string FulfilmentClientName
+        +Pivot? Pivot
+        +List~ProductLocation~ ProductLocations
+    }
+    
+    Pivot "1" *-- "1" Product
+    Pivot "1" *-- "1" FullPicklist
+    
+    class ProductLocation {
+        +int Id
+        +string Uuid
+        +int Stock
+        +Location Location
+    }
+    
+    ProductLocation "1" *-- "1" Location
+    
+    Product "1" --> "0..*" ProductLocation
+    
+    class ShippingAddress {
+        +int Id
+        +string Fullname
+        +string AddressLine1
+        +string? AddressLine2
+        +string PostalCode
+        +string City
+        +string Country
+    }
+    
+    FullPicklist "1" --> "1" ShippingAddress
