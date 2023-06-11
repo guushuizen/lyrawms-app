@@ -143,9 +143,13 @@ public class TransferStockViewModel : BaseViewModel
             return;
         }
         
-        if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
+        //if (await _productService.MoveStock(Product, QuantityToMove, NewLocation, OldProductLocation))
+        if (true)
         {
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("..", new Dictionary<string, object>
+            {
+                {"ShouldRefresh", true}
+            });
         }
         else
         {

@@ -6,6 +6,7 @@ using LyraWMS.Views.Products;
 namespace LyraWMS.ViewModels.Products;
 
 [QueryProperty(nameof(Product), "Product")]
+[QueryProperty(nameof(ShouldRefresh), "ShouldRefresh")]
 public class ProductDetailViewModel : BaseViewModel
 {
     private Product _product;
@@ -17,11 +18,25 @@ public class ProductDetailViewModel : BaseViewModel
             Loading = false;
         }
     }
-    
+
+    private bool _shouldRefresh;
+    public bool ShouldRefresh
+    {
+        get => _shouldRefresh;
+        set
+        {
+            SetProperty(ref _shouldRefresh, value);
+            if (value)
+            {
+                Task.Run(Refresh);
+            }
+        }
+    }
+
     public ICommand GoToTransferStockPageCommand { get; set; }
 
     private ProductService _productService;
-    
+
     public ProductDetailViewModel(ProductService productService)
     {
         Loading = true;
