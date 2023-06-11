@@ -142,7 +142,7 @@ public class TransferStockViewModel : BaseViewModel
         IsLoadingLocations = false;
     }
 
-    private async Task MoveStock()
+    public async Task MoveStock()
     {
         if (QuantityToMove == 0)
         {

@@ -7,7 +7,7 @@ namespace LyraWMS.Tests;
 public class AuthorizedAPIServiceTests
 {
 
-    private AuthorizedAPIService _apiService = new(new AuthenticationService());
+    private AuthorizedAPIService _apiService = new(new AuthenticationService(new StorageService()));
     
     private string GetFileContents(string resourceFile)
     {
