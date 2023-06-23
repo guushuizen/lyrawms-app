@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WMS.ViewModels.Products"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:WMS.Models"
+             x:Class="WMS.Views.Products.ProductDetailPage"
+             x:DataType="vm:ProductDetailViewModel"
+             Title="{Binding Product.Name}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <VerticalStackLayout
+            VerticalOptions="Fill"
+            HorizontalOptions="Center">
+
+            <ActivityIndicator
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                IsRunning="True"
+                HeightRequest="100"
+                WidthRequest="100"
+                IsVisible="{Binding Loading}" />
+
+            <VerticalStackLayout
+                HorizontalOptions="Fill"
+                IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}"
+                Padding="10,5,10,0">
+                <Label
+                    Text="Details"
+                    FontSize="24"
+                    FontFamily="OpenSansBold" />
+
+                <Grid RowSpacing="5" Padding="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Voorraad"
+                            FontFamily="OpenSansBold" />
+                        <Label
+                            Text="{Binding Product.TotalStock}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                        <Label
+                            Text="SKU"
+                            FontFamily="OpenSansBold" />
+                        <Label
+                            Text="{Binding Product.Sku}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="0" Grid.Row="1">
+                        <Label
+                            Text="Type"
+                            FontFamily="OpenSansBold" />
+
+                        <Label
+                            Text="{Binding Product.Type, Converter={toolkit:TextCaseConverter Type=FirstUpperRestLower}}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Grid.Row="1">
+                        <Label
+                            Text="Fulfilmentklant"
+                            FontFamily="OpenSansBold" />
+
+                        <Label Text="{Binding Product.FulfilmentClientName}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <BoxView
+                    Margin="0,10,0,10"
+                    HeightRequest="1"
+                    Color="{StaticResource Gray100}" />
+
+                <Label
+                    Text="Voorraadlocaties"
+                    FontFamily="OpenSansBold"
+                    FontSize="24"
+                    Margin="0,10,0,0" />
+
+                <ListView
+                    ItemsSource="{Binding Product.ProductLocations}"
+                    SelectionMode="None"
+                    Margin="0,10">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ProductLocation">
+                            <ViewCell>
+                                <StackLayout
+                                    Margin="0,0,0,10"
+                                    Padding="2,0">
+                                    
+                                    <Border
+                                        Stroke="{StaticResource Gray100}"
+                                        StrokeThickness="2" >
+
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="5,5,5,5" />
+                                        </Border.StrokeShape>
+
+                                        <Grid
+                                            Padding="4"
+                                            HorizontalOptions="Fill">
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label
+                                                HorizontalOptions="Start"
+                                                Text="{Binding Location.Name}"
+                                                FontFamily="OpenSansBold"
+                                                FontSize="18" />
+                                            
+                                            <Label
+                                                HorizontalOptions="End"
+                                                Grid.Column="1"
+                                                FontSize="14"
+                                                Text="{Binding Stock, StringFormat='{0}x'}" />
+                                        </Grid>
+                                    </Border>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button
+                    Text="Voorraad verplaatsen"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"
+                    HorizontalOptions="Fill"
+                    Command="{Binding GoToTransferStockPageCommand}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>
